@@ -1,25 +1,25 @@
 export const salon = {
   name: 'BlackSilva',
   email: 'blacksilvahd@gmail.com',
-  phonePolicy: 'Cere numarul direct al stilistului tau dupa prima vizita.',
   address: 'Badstuestraede 16, 1053 Kobenhavn',
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Badstuestr%C3%A6de+16%2C+1053+K%C3%B8benhavn',
+  hours: 'Mie 14-20 / Joi-Dum 11-17',
 };
 
 export const stylists = [
   {
     id: 'eduard',
     name: 'Eduard',
-    role: 'Specialist grooming masculin',
+    role: 'Men grooming specialist',
     initial: 'E',
-    focus: 'Tunsori moderne, barba, detalii precise si styling cu personalitate.',
+    focus: 'Tunsori masculine moderne, barba, detalii precise si styling cu personalitate.',
     specialties: ['Tunsori barbati', 'Barba', 'Grooming'],
   },
   {
     id: 'elena',
     name: 'Elena',
-    role: 'Specialist par si styling feminin',
+    role: 'Women hair specialist',
     initial: 'E',
     focus: 'Tunsori feminine, styling, blow dry si look-uri versatile pentru evenimente.',
     specialties: ['Tunsori femei', 'Styling', 'Unisex'],
@@ -29,7 +29,7 @@ export const stylists = [
 export const services = [
   {
     id: 'men-haircut',
-    name: 'Men’s Haircut',
+    name: "Men's Haircut",
     category: 'Barbati',
     duration: 45,
     price: 180,
@@ -57,7 +57,7 @@ export const services = [
   },
   {
     id: 'women-haircut',
-    name: 'Women’s Haircut',
+    name: "Women's Haircut",
     category: 'Femei',
     duration: 60,
     price: 320,
@@ -94,7 +94,7 @@ export const services = [
   },
   {
     id: 'pack-five',
-    name: '5× Haircut Pack',
+    name: '5x Haircut Pack',
     category: 'Pachete',
     duration: 45,
     price: 799,
@@ -131,6 +131,8 @@ export const seededBookings = [
     client: { name: 'Demo client', phone: '+45 12 34 56 78', email: 'demo@blacksilva.ro' },
     protection: true,
     productId: 'repair-mask',
+    status: 'confirmed',
+    source: 'seed',
     createdAt: 'demo',
   },
 ];
