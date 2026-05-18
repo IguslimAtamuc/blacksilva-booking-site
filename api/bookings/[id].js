@@ -1,4 +1,4 @@
-import { updateBookingStatus } from '../../server/bookings.js';
+import { resendBookingEmail, updateBookingStatus } from '../../server/bookings.js';
 
 function isAdminAuthorized(req) {
   if (!process.env.ADMIN_ACCESS_CODE) return true;
@@ -14,8 +14,8 @@ function sendError(res, error) {
 
 export default async function handler(req, res) {
   try {
-    if (req.method !== 'PATCH') {
-      res.setHeader('Allow', 'PATCH');
+    if (req.method !== 'PATCH' && req.method !== 'POST') {
+      res.setHeader('Allow', 'PATCH, POST');
       res.status(405).json({ ok: false, message: 'Method not allowed' });
       return;
     }
@@ -26,6 +26,17 @@ export default async function handler(req, res) {
     }
 
     const id = req.query.id;
+
+    if (req.method === 'POST') {
+      if (req.body?.action !== 'send-email') {
+        res.status(400).json({ ok: false, message: 'Actiune invalida.' });
+        return;
+      }
+      const result = await resendBookingEmail(id);
+      res.status(200).json({ ok: true, ...result });
+      return;
+    }
+
     const booking = await updateBookingStatus(id, req.body?.status);
     res.status(200).json({ ok: true, booking });
   } catch (error) {

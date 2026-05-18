@@ -8,6 +8,7 @@ Sistem de booking pentru un singur salon BlackSilva, inspirat vizual din prototi
 - `/admin` - website/app de administrare pentru salon;
 - API `/api/bookings` pentru salvarea rezervarilor;
 - email transactional prin Resend, configurat server-side;
+- status email pe fiecare rezervare si retry din admin;
 - confirmare cu fisier calendar `.ics`;
 - statusuri admin: confirmed, completed, cancelled, no-show;
 - build pregatit pentru Vercel Functions.
@@ -37,3 +38,5 @@ Seteaza variabilele din `.env.example` in Vercel:
 - optional `GITHUB_DATA_REPO`, `GITHUB_DATA_PATH`, `GITHUB_TOKEN` pentru stocare persistenta intr-un repo privat de date.
 
 Fara storage persistent configurat, Vercel foloseste fallback temporar in `/tmp`, bun pentru demo dar nu pentru productie.
+
+Admin-ul poate retrimite emailul de confirmare pentru orice rezervare. Daca `RESEND_API_KEY` lipseste, statusul ramane `Resend neconfigurat` si rezervarea nu se pierde.

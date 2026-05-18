@@ -2,6 +2,33 @@ import { createBooking, getService, getTimeSlots } from '../src/booking.js';
 import { readBookings, writeBookings } from './storage.js';
 import { sendBookingEmails } from './email.js';
 
+function emailStatusFromResult(email) {
+  if (email?.sent) {
+    return {
+      state: 'sent',
+      label: 'Email trimis',
+      lastAttemptAt: new Date().toISOString(),
+      details: email.results || [],
+    };
+  }
+
+  if (email?.skipped) {
+    return {
+      state: 'not-configured',
+      label: 'Resend neconfigurat',
+      lastAttemptAt: new Date().toISOString(),
+      reason: email.reason,
+    };
+  }
+
+  return {
+    state: 'failed',
+    label: 'Email esuat',
+    lastAttemptAt: new Date().toISOString(),
+    details: email?.results || [],
+  };
+}
+
 function normalizeBooking(input) {
   return {
     serviceId: input.serviceId,
@@ -66,9 +93,22 @@ export async function reserveBooking(input) {
   const booking = createBooking(normalized);
   const updated = [booking, ...bookings];
   await writeBookings(updated);
-  const email = await sendBookingEmails(booking);
+  let email;
 
-  return { booking, email };
+  try {
+    email = await sendBookingEmails(booking);
+  } catch (error) {
+    email = { sent: false, results: [{ ok: false, error: error.message }] };
+  }
+
+  const bookingWithEmail = {
+    ...booking,
+    emailStatus: emailStatusFromResult(email),
+  };
+
+  await writeBookings([bookingWithEmail, ...bookings]);
+
+  return { booking: bookingWithEmail, email };
 }
 
 export async function updateBookingStatus(id, status) {
@@ -89,4 +129,31 @@ export async function updateBookingStatus(id, status) {
 
   await writeBookings(updated);
   return updated.find((booking) => booking.id === id);
+}
+
+export async function resendBookingEmail(id) {
+  const bookings = await readBookings();
+  const booking = bookings.find((item) => item.id === id);
+
+  if (!booking) {
+    const error = new Error('Programarea nu exista.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  let email;
+  try {
+    email = await sendBookingEmails(booking);
+  } catch (error) {
+    email = { sent: false, results: [{ ok: false, error: error.message }] };
+  }
+
+  const updatedBooking = {
+    ...booking,
+    emailStatus: emailStatusFromResult(email),
+  };
+  const updated = bookings.map((item) => (item.id === id ? updatedBooking : item));
+  await writeBookings(updated);
+
+  return { booking: updatedBooking, email };
 }

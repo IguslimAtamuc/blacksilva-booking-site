@@ -500,9 +500,10 @@ function StatCard({ label, value, icon }) {
   );
 }
 
-function AdminBookingCard({ booking, onStatus }) {
+function AdminBookingCard({ booking, onStatus, onEmail }) {
   const service = getService(booking.serviceId);
   const stylist = getStylist(booking.stylistId);
+  const emailState = booking.emailStatus?.state || 'unknown';
 
   return (
     <article className="admin-booking-card">
@@ -514,6 +515,10 @@ function AdminBookingCard({ booking, onStatus }) {
       <p>
         {service?.name} cu {stylist?.name}
       </p>
+      <div className={cx('email-pill', emailState)}>
+        <Mail size={14} />
+        <span>{booking.emailStatus?.label || 'Email neverificat'}</span>
+      </div>
       <div className="booking-meta">
         <span>
           <CalendarDays size={15} />
@@ -540,6 +545,10 @@ function AdminBookingCard({ booking, onStatus }) {
           </button>
         ))}
       </div>
+      <button type="button" className="email-action" onClick={() => onEmail(booking.id)}>
+        <Mail size={15} />
+        Retrimite email
+      </button>
     </article>
   );
 }
@@ -588,6 +597,39 @@ function AdminApp() {
       });
     } catch (statusError) {
       setError(statusError.message);
+      load();
+    }
+  };
+
+  const resendEmail = async (id) => {
+    setError('');
+    setBookings((current) =>
+      current.map((booking) =>
+        booking.id === id
+          ? {
+              ...booking,
+              emailStatus: {
+                ...(booking.emailStatus || {}),
+                state: 'sending',
+                label: 'Se trimite...',
+              },
+            }
+          : booking
+      )
+    );
+
+    try {
+      const payload = await apiFetch(`/api/bookings/${id}`, {
+        method: 'POST',
+        headers: adminCode ? { 'x-admin-code': adminCode } : {},
+        body: JSON.stringify({ action: 'send-email' }),
+      });
+      setBookings((current) => current.map((booking) => (booking.id === id ? payload.booking : booking)));
+      if (!payload.email?.sent) {
+        setError(payload.email?.reason || 'Emailul nu a fost trimis. Verifica RESEND_API_KEY.');
+      }
+    } catch (emailError) {
+      setError(emailError.message);
       load();
     }
   };
@@ -676,7 +718,7 @@ function AdminApp() {
         {!loading && filtered.length === 0 ? <div className="empty-state">Nu sunt programari aici.</div> : null}
         <div className="admin-list">
           {filtered.map((booking) => (
-            <AdminBookingCard key={booking.id} booking={booking} onStatus={updateStatus} />
+            <AdminBookingCard key={booking.id} booking={booking} onStatus={updateStatus} onEmail={resendEmail} />
           ))}
         </div>
       </main>

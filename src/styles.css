@@ -736,6 +736,35 @@ a {
   color: var(--danger);
 }
 
+.email-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.email-pill.sent {
+  border-color: rgba(169, 214, 154, 0.38);
+  color: var(--success);
+}
+
+.email-pill.failed,
+.email-pill.not-configured {
+  border-color: rgba(232, 137, 123, 0.34);
+  color: var(--danger);
+}
+
+.email-pill.sending {
+  border-color: rgba(214, 180, 110, 0.45);
+  color: var(--accent-2);
+}
+
 .booking-card-top small {
   color: var(--dim);
   font-size: 11px;
@@ -765,6 +794,20 @@ a {
 .status-actions button {
   min-height: 40px;
   font-size: 10px;
+}
+
+.email-action {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(214, 180, 110, 0.45);
+  background: rgba(214, 180, 110, 0.08);
+  color: var(--accent-2);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .empty-state {
