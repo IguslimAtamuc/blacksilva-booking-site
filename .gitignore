@@ -5,3 +5,5 @@ data/
 .DS_Store
 qa-*.png
 npm-debug.log*
+
+.vercel
