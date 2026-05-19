@@ -36,6 +36,19 @@ html,
 body,
 #root {
   min-height: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 body {
@@ -215,22 +228,6 @@ a {
   padding: 0 20px 22px;
 }
 
-.screen::-webkit-scrollbar,
-.stack-list::-webkit-scrollbar,
-.day-rail::-webkit-scrollbar,
-.filter-rail::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.screen::-webkit-scrollbar-thumb,
-.stack-list::-webkit-scrollbar-thumb,
-.day-rail::-webkit-scrollbar-thumb,
-.filter-rail::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(255, 210, 26, 0.42);
-}
-
 .launcher-screen,
 .confirmation-screen {
   display: grid;
@@ -357,6 +354,13 @@ a {
   box-shadow: 0 0 34px rgba(255, 210, 26, 0.24);
 }
 
+.hero-lettermark {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+}
+
 .icon-button {
   cursor: pointer;
 }
@@ -406,6 +410,13 @@ a {
   box-shadow: var(--shadow-soft);
 }
 
+.wide-action:disabled,
+.app-nav-grid button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+  box-shadow: none;
+}
+
 .app-nav-grid button svg,
 .admin-tabs button svg,
 .wide-action svg {
@@ -430,12 +441,6 @@ a {
 .payment-options button.selected svg,
 .product-actions button.selected svg {
   color: #090a0d;
-}
-
-.app-nav-grid .rent-button {
-  grid-column: 1 / -1;
-  min-height: 66px;
-  color: var(--accent-2);
 }
 
 .step-screen {
@@ -1314,6 +1319,11 @@ a {
   box-shadow: none;
 }
 
+.client-stage .hero-lettermark {
+  font-size: 1.42rem;
+  letter-spacing: 0.08em;
+}
+
 .client-stage .screen-kicker,
 .client-stage .list-group h2 {
   color: rgba(255, 255, 255, 0.76);
@@ -1368,10 +1378,6 @@ a {
 
 .client-stage .app-nav-grid button:first-child {
   border-left: 0;
-}
-
-.client-stage .app-nav-grid .rent-button {
-  grid-column: auto;
 }
 
 .client-stage .app-nav-grid button.selected,
@@ -1881,7 +1887,7 @@ a {
 
   .tailadmin-app .admin-screen > .admin-tabs {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.5rem;
   }
 

@@ -15,7 +15,6 @@ import {
   Search,
   ShoppingBag,
   ShieldCheck,
-  Sparkles,
   UserRound,
   Users,
 } from 'lucide-react';
@@ -222,7 +221,8 @@ function BigButton({ selected, children, onClick, disabled }) {
 }
 
 function ServiceScreen({ selection, setSelection }) {
-  const categories = [...new Set(services.map((service) => service.category))];
+  const clientServices = services.filter((service) => service.category !== 'Business');
+  const categories = [...new Set(clientServices.map((service) => service.category))];
 
   return (
     <section className="step-screen">
@@ -232,7 +232,7 @@ function ServiceScreen({ selection, setSelection }) {
         {categories.map((category) => (
           <div key={category} className="list-group">
             <h2>{category}</h2>
-            {services
+            {clientServices
               .filter((service) => service.category === category)
               .map((service) => (
                 <BigButton
@@ -498,12 +498,12 @@ function ConfirmationScreen({ booking, email, onReset }) {
   );
 }
 
-function ClientQuickNav({ view, setView, onRentChair }) {
+function ClientQuickNav({ view, setView }) {
   const items = [
     { id: 'book', label: 'Booking', icon: <Scissors size={19} /> },
     { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={19} /> },
     { id: 'shop', label: 'Shop', icon: <ShoppingBag size={19} /> },
-    { id: 'profile', label: 'Login', icon: <UserRound size={19} /> },
+    { id: 'profile', label: 'Account', icon: <UserRound size={19} /> },
   ];
 
   return (
@@ -519,10 +519,6 @@ function ClientQuickNav({ view, setView, onRentChair }) {
           <span>{item.label}</span>
         </button>
       ))}
-      <button type="button" className="rent-button" onClick={onRentChair}>
-        <Package size={19} />
-        <span>Rent chair</span>
-      </button>
     </div>
   );
 }
@@ -556,6 +552,65 @@ function ProfileScreen({ profile, setProfile, applyProfile }) {
         Salveaza profil
       </button>
     </section>
+  );
+}
+
+function ClientAuthGate({ mode, setMode, profile, setProfile, onSubmit }) {
+  const isCreate = mode === 'create';
+  const updateProfile = (field, value) => {
+    setProfile((current) => ({ ...current, [field]: value }));
+  };
+  const canSubmit = isCreate ? Boolean(profile.name && profile.phone && profile.email) : Boolean(profile.email);
+
+  return (
+    <main className="screen client-screen auth-screen">
+      <section className="app-hero auth-hero">
+        <div>
+          <span className="screen-kicker">BlackSilva access</span>
+          <h1>{isCreate ? 'Create account.' : 'Login.'}</h1>
+          <p>{isCreate ? 'Creeaza profilul si apoi poti face booking.' : 'Intra cu emailul tau ca sa vezi booking-ul.'}</p>
+        </div>
+        <span className="hero-icon hero-lettermark">BS</span>
+      </section>
+
+      <div className="app-nav-grid auth-toggle">
+        <button type="button" className={mode === 'login' ? 'selected' : ''} onClick={() => setMode('login')}>
+          <UserRound size={19} />
+          <span>Login</span>
+        </button>
+        <button type="button" className={mode === 'create' ? 'selected' : ''} onClick={() => setMode('create')}>
+          <Check size={19} />
+          <span>Create Account</span>
+        </button>
+      </div>
+
+      <section className="step-screen feature-screen auth-card">
+        <span className="screen-kicker">{isCreate ? 'New client' : 'Client login'}</span>
+        <h1>{isCreate ? 'Profil nou.' : 'Bine ai revenit.'}</h1>
+        <div className="form-stack">
+          {isCreate && (
+            <>
+              <label>
+                Nume complet
+                <input value={profile.name} onChange={(event) => updateProfile('name', event.target.value)} />
+              </label>
+              <label>
+                Telefon
+                <input value={profile.phone} onChange={(event) => updateProfile('phone', event.target.value)} />
+              </label>
+            </>
+          )}
+          <label>
+            Email
+            <input value={profile.email} onChange={(event) => updateProfile('email', event.target.value)} />
+          </label>
+        </div>
+        <button type="button" className="wide-action" disabled={!canSubmit} onClick={onSubmit}>
+          <UserRound size={18} />
+          {isCreate ? 'Create Account' : 'Login'}
+        </button>
+      </section>
+    </main>
   );
 }
 
@@ -672,6 +727,10 @@ function ClientApp() {
   const [step, setStep] = useState(0);
   const [profile, setProfile] = useState(savedProfile);
   const [selection, setSelection] = useState({ ...initialSelection, client: { ...emptyClient, ...savedProfile } });
+  const [authMode, setAuthMode] = useState('login');
+  const [isClientAuthed, setIsClientAuthed] = useState(
+    () => Boolean(savedProfile.email) && window.localStorage.getItem('bs-client-auth') === '1'
+  );
   const [bookings, setBookings] = useState([]);
   const [clientBookings, setClientBookings] = useState([]);
   const [clientCalendarLoading, setClientCalendarLoading] = useState(false);
@@ -741,6 +800,7 @@ function ClientApp() {
 
   const applyProfile = () => {
     saveLocalJson('bs-client-profile', profile);
+    window.localStorage.setItem('bs-client-auth', '1');
     setSelection((current) => ({
       ...current,
       client: {
@@ -750,25 +810,15 @@ function ClientApp() {
         email: profile.email,
       },
     }));
+    setIsClientAuthed(true);
     setView('book');
     loadClientBookings(profile.email);
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }));
   };
 
   const goToBooking = (nextStep = step) => {
     setView('book');
     setStep(nextStep);
-  };
-
-  const startChairRental = () => {
-    setSelection((current) => ({
-      ...current,
-      serviceId: 'chair-rental-halfday',
-      stylistId: 'chair',
-      productId: 'none',
-      source: 'chair-rental',
-      time: '',
-    }));
-    goToBooking(2);
   };
 
   if (confirmed?.booking) {
@@ -787,6 +837,20 @@ function ClientApp() {
     );
   }
 
+  if (!isClientAuthed) {
+    return (
+      <PhoneFrame app="client">
+        <ClientAuthGate
+          mode={authMode}
+          setMode={setAuthMode}
+          profile={profile}
+          setProfile={setProfile}
+          onSubmit={applyProfile}
+        />
+      </PhoneFrame>
+    );
+  }
+
   return (
     <PhoneFrame app="client">
       <main className="screen client-screen">
@@ -796,12 +860,10 @@ function ClientApp() {
             <h1>Book your chair.</h1>
             <p>{salon.hours}</p>
           </div>
-          <span className="hero-icon">
-            <Sparkles size={24} />
-          </span>
+          <span className="hero-icon hero-lettermark">BS</span>
         </section>
 
-        <ClientQuickNav view={view} setView={setView} onRentChair={startChairRental} />
+        <ClientQuickNav view={view} setView={setView} />
 
         {view === 'book' && (
           <>
@@ -938,6 +1000,7 @@ function AdminTabs({ active, setActive, variant = 'inline' }) {
     { id: 'bookings', label: 'Bookings', icon: <Clock size={18} /> },
     { id: 'clients', label: 'Clients', icon: <Users size={18} /> },
     { id: 'stock', label: 'Stock', icon: <Package size={18} /> },
+    { id: 'rentals', label: 'Rent Chair', icon: <ShieldCheck size={18} /> },
   ];
 
   return (
@@ -1069,6 +1132,51 @@ function StockScreen({ bookings }) {
                 <small>{Math.max(product.stock - sold, 0)} buc disponibile / {sold} vandute</small>
               </div>
               <b>{formatMoney(product.price)}</b>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function ChairRentalsScreen({ bookings }) {
+  const rentalServices = services.filter((service) => service.category === 'Business');
+  const rentalBookings = bookings.filter(
+    (booking) => booking.source === 'chair-rental' || booking.serviceId?.includes('chair-rental')
+  );
+
+  return (
+    <section className="step-screen feature-screen">
+      <span className="screen-kicker">Rent chair</span>
+      <h1>Inchiriere scaun.</h1>
+      <p className="fine-copy">Oferta si cererile pentru barber/stylist independent stau doar in admin.</p>
+      <div className="shop-list">
+        {rentalServices.map((service) => (
+          <article className="product-card" key={service.id}>
+            <div>
+              <span>{service.duration} minute</span>
+              <strong>{service.name}</strong>
+              <small>{service.description}</small>
+            </div>
+            <b>{formatMoney(service.price)}</b>
+          </article>
+        ))}
+      </div>
+      <div className="compact-list">
+        {rentalBookings.length === 0 ? <div className="empty-state">Nu exista cereri de inchiriere inca.</div> : null}
+        {rentalBookings.map((booking) => {
+          const service = getService(booking.serviceId);
+          return (
+            <article className="mini-card" key={booking.id}>
+              <div>
+                <strong>{booking.client?.name || 'Business client'}</strong>
+                <span>
+                  {service?.name || 'Chair rental'} / {displayDate(booking.date)} la {booking.time}
+                </span>
+                <small>{booking.client?.email || booking.client?.phone || booking.id}</small>
+              </div>
+              <b>{formatMoney(getBookingTotal(booking))}</b>
             </article>
           );
         })}
@@ -1259,6 +1367,7 @@ function AdminApp() {
         {!loading && activeTab === 'calendar' && <AdminCalendar bookings={bookings} />}
         {!loading && activeTab === 'clients' && <CustomersScreen bookings={bookings} />}
         {!loading && activeTab === 'stock' && <StockScreen bookings={bookings} />}
+        {!loading && activeTab === 'rentals' && <ChairRentalsScreen bookings={bookings} />}
 
         {!loading && activeTab === 'bookings' && (
           <>
