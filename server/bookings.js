@@ -1,6 +1,6 @@
-import { createBooking, getService, getTimeSlots } from '../src/booking.js';
+import { createBooking, getBookingTotal, getService, getTimeSlots } from '../src/booking.js';
 import { readBookings, writeBookings } from './storage.js';
-import { sendBookingEmails } from './email.js';
+import { sendBookingEmails, sendBookingReminderEmail } from './email.js';
 
 function emailStatusFromResult(email) {
   if (email?.sent) {
@@ -30,6 +30,9 @@ function emailStatusFromResult(email) {
 }
 
 function normalizeBooking(input) {
+  const paymentMethod = input.payment?.method || input.paymentMethod || 'salon';
+  const normalizedPaymentMethod = ['salon', 'card-demo', 'deposit'].includes(paymentMethod) ? paymentMethod : 'salon';
+
   return {
     serviceId: input.serviceId,
     stylistId: input.stylistId,
@@ -39,6 +42,10 @@ function normalizeBooking(input) {
     productId: input.productId || 'none',
     status: 'confirmed',
     source: input.source || 'client',
+    payment: {
+      method: normalizedPaymentMethod,
+      status: normalizedPaymentMethod === 'card-demo' ? 'paid-demo' : 'pending',
+    },
     client: {
       name: String(input.client?.name || '').trim(),
       phone: String(input.client?.phone || '').trim(),
@@ -69,6 +76,20 @@ export async function listBookings() {
   return bookings.sort((a, b) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`));
 }
 
+export async function listClientBookings(email) {
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+    const error = new Error('Emailul nu este valid.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const bookings = await readBookings();
+  return bookings
+    .filter((booking) => booking.client?.email === cleanEmail)
+    .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
+}
+
 export async function reserveBooking(input) {
   const normalized = normalizeBooking(input);
   const errors = validateBooking(normalized);
@@ -91,6 +112,10 @@ export async function reserveBooking(input) {
   }
 
   const booking = createBooking(normalized);
+  booking.payment = {
+    ...booking.payment,
+    amount: getBookingTotal(booking),
+  };
   const updated = [booking, ...bookings];
   await writeBookings(updated);
   let email;
@@ -156,4 +181,37 @@ export async function resendBookingEmail(id) {
   await writeBookings(updated);
 
   return { booking: updatedBooking, email };
+}
+
+export async function sendBookingReminder(id) {
+  const bookings = await readBookings();
+  const booking = bookings.find((item) => item.id === id);
+
+  if (!booking) {
+    const error = new Error('Programarea nu exista.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  let reminder;
+  try {
+    reminder = await sendBookingReminderEmail(booking);
+  } catch (error) {
+    reminder = { sent: false, results: [{ ok: false, error: error.message }] };
+  }
+
+  const updatedBooking = {
+    ...booking,
+    reminderStatus: {
+      state: reminder?.sent ? 'sent' : reminder?.skipped ? 'not-configured' : 'failed',
+      label: reminder?.sent ? 'Reminder trimis' : reminder?.skipped ? 'Resend neconfigurat' : 'Reminder esuat',
+      lastAttemptAt: new Date().toISOString(),
+      reason: reminder?.reason,
+      details: reminder?.results || [],
+    },
+  };
+  const updated = bookings.map((item) => (item.id === id ? updatedBooking : item));
+  await writeBookings(updated);
+
+  return { booking: updatedBooking, reminder };
 }

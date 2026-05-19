@@ -1,7 +1,14 @@
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listBookings, reserveBooking, resendBookingEmail, updateBookingStatus } from './server/bookings.js';
+import {
+  listBookings,
+  listClientBookings,
+  reserveBooking,
+  resendBookingEmail,
+  sendBookingReminder,
+  updateBookingStatus,
+} from './server/bookings.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -45,6 +52,15 @@ app.get('/api/availability', async (_req, res) => {
   }
 });
 
+app.get('/api/client-bookings', async (req, res) => {
+  try {
+    const bookings = await listClientBookings(req.query.email);
+    res.json({ ok: true, bookings });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ ok: false, message: error.message });
+  }
+});
+
 app.post('/api/bookings', async (req, res) => {
   try {
     const result = await reserveBooking(req.body || {});
@@ -73,12 +89,17 @@ app.post('/api/bookings/:id', async (req, res) => {
       res.status(401).json({ ok: false, message: 'Admin code required.' });
       return;
     }
-    if (req.body?.action !== 'send-email') {
-      res.status(400).json({ ok: false, message: 'Actiune invalida.' });
+    if (req.body?.action === 'send-email') {
+      const result = await resendBookingEmail(req.params.id);
+      res.json({ ok: true, ...result });
       return;
     }
-    const result = await resendBookingEmail(req.params.id);
-    res.json({ ok: true, ...result });
+    if (req.body?.action === 'send-reminder') {
+      const result = await sendBookingReminder(req.params.id);
+      res.json({ ok: true, ...result });
+      return;
+    }
+    res.status(400).json({ ok: false, message: 'Actiune invalida.' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ ok: false, message: error.message });
   }

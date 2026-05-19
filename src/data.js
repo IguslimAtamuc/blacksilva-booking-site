@@ -24,6 +24,14 @@ export const stylists = [
     focus: 'Tunsori feminine, styling, blow dry si look-uri versatile pentru evenimente.',
     specialties: ['Tunsori femei', 'Styling', 'Unisex'],
   },
+  {
+    id: 'chair',
+    name: 'Chair 01',
+    role: 'Rentable salon station',
+    initial: 'C',
+    focus: 'Scaun pregatit pentru barber/stylist independent, cu acces direct la rezervare.',
+    specialties: ['Chair rental', 'Studio'],
+  },
 ];
 
 export const services = [
@@ -101,14 +109,32 @@ export const services = [
     staffIds: ['eduard'],
     description: 'Cinci tunsori preplatite, valabile 12 luni, cu economie fata de vizite separate.',
   },
+  {
+    id: 'chair-rental-halfday',
+    name: 'Chair Rental / Half Day',
+    category: 'Business',
+    duration: 240,
+    price: 900,
+    staffIds: ['chair'],
+    description: 'Inchiriaza scaunul BlackSilva pentru jumatate de zi, cu confirmare in admin.',
+  },
+  {
+    id: 'chair-rental-day',
+    name: 'Chair Rental / Full Day',
+    category: 'Business',
+    duration: 360,
+    price: 1500,
+    staffIds: ['chair'],
+    description: 'Rezerva un scaun complet pentru o zi de lucru in salon.',
+  },
 ];
 
 export const products = [
-  { id: 'none', name: 'Fara produs', price: 0 },
-  { id: 'stylist-pick', name: 'Produs ales de stilist', price: 180 },
-  { id: 'texture-spray', name: 'Texture Salt Spray', price: 195 },
-  { id: 'matte-clay', name: 'Matte Clay', price: 210 },
-  { id: 'repair-mask', name: 'Repair Mask No.7', price: 320 },
+  { id: 'none', name: 'Fara produs', price: 0, stock: 0, category: 'None' },
+  { id: 'stylist-pick', name: 'Produs ales de stilist', price: 180, stock: 12, category: 'Salon Pick' },
+  { id: 'texture-spray', name: 'Texture Salt Spray', price: 195, stock: 18, category: 'Styling' },
+  { id: 'matte-clay', name: 'Matte Clay', price: 210, stock: 9, category: 'Styling' },
+  { id: 'repair-mask', name: 'Repair Mask No.7', price: 320, stock: 6, category: 'Care' },
 ];
 
 export const openingHours = {

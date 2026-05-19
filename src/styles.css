@@ -328,9 +328,60 @@ a {
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 
+.app-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.app-nav-grid button,
+.admin-tabs button,
+.wide-action,
+.payment-options button,
+.product-actions button,
+.cart-summary button,
+.mini-card a {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  background: rgba(245, 239, 228, 0.04);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.app-nav-grid button svg,
+.admin-tabs button svg,
+.wide-action svg {
+  color: var(--accent-2);
+}
+
+.app-nav-grid button.selected,
+.app-nav-grid button:hover,
+.admin-tabs button.selected,
+.payment-options button.selected,
+.product-actions button.selected {
+  border-color: rgba(214, 180, 110, 0.68);
+  background: linear-gradient(180deg, rgba(214, 180, 110, 0.16), rgba(214, 180, 110, 0.035));
+}
+
+.app-nav-grid .rent-button {
+  grid-column: 1 / -1;
+  min-height: 58px;
+  color: var(--accent-2);
+}
+
 .step-screen {
   display: grid;
   gap: 15px;
+}
+
+.feature-screen {
+  padding-bottom: 10px;
 }
 
 .stack-list {
@@ -520,6 +571,42 @@ a {
   text-align: left;
 }
 
+.payment-options {
+  display: grid;
+  gap: 8px;
+}
+
+.payment-options button {
+  min-height: 74px;
+  justify-content: flex-start;
+  padding: 13px;
+  text-align: left;
+}
+
+.payment-options strong,
+.product-card strong,
+.mini-card strong,
+.insight-card strong,
+.calendar-row strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.payment-options small,
+.product-card small,
+.mini-card small,
+.insight-card small,
+.calendar-row small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .addons-panel strong {
   display: block;
 }
@@ -535,7 +622,12 @@ a {
 .stat-card,
 .search-box,
 .empty-state,
-.error-box {
+.error-box,
+.product-card,
+.mini-card,
+.insight-card,
+.day-card,
+.cart-summary {
   border: 1px solid var(--line);
   background: rgba(245, 239, 228, 0.04);
 }
@@ -642,6 +734,16 @@ a {
   gap: 8px;
 }
 
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.dashboard-grid .insight-card {
+  grid-column: 1 / -1;
+}
+
 .stat-card {
   min-height: 84px;
   display: grid;
@@ -691,6 +793,26 @@ a {
   display: flex;
   min-height: 50px;
   align-items: stretch;
+}
+
+.admin-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(64px, 1fr));
+  gap: 6px;
+  min-height: 61px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+}
+
+.admin-tabs button {
+  min-width: 64px;
+  min-height: 58px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 4px;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .filter-rail button {
@@ -808,6 +930,124 @@ a {
   cursor: pointer;
   font-size: 12px;
   font-weight: 900;
+}
+
+.compact-list,
+.shop-list,
+.calendar-list {
+  display: grid;
+  gap: 10px;
+}
+
+.mini-card,
+.product-card,
+.cart-summary,
+.insight-card,
+.day-card {
+  padding: 14px;
+}
+
+.mini-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.mini-card span,
+.product-card span,
+.cart-summary span,
+.insight-card span {
+  display: block;
+  color: var(--dim);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mini-card b,
+.product-card b,
+.cart-summary strong {
+  color: var(--accent-2);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.mini-card a {
+  min-height: 40px;
+  padding: 0 10px;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+
+.product-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.product-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.product-actions button {
+  min-height: 42px;
+}
+
+.cart-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart-summary button {
+  grid-column: 1 / -1;
+  border-color: rgba(214, 180, 110, 0.45);
+  background: rgba(214, 180, 110, 0.08);
+  color: var(--accent-2);
+}
+
+.calendar-list {
+  padding-bottom: 6px;
+}
+
+.day-card {
+  display: grid;
+  gap: 10px;
+}
+
+.day-card h2 {
+  margin: 0;
+  color: var(--accent-2);
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.calendar-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.calendar-row time {
+  color: var(--accent-2);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.wide-action {
+  border-color: rgba(214, 180, 110, 0.45);
+  background: rgba(214, 180, 110, 0.08);
+  color: var(--accent-2);
 }
 
 .empty-state {

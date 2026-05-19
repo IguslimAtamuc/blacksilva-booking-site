@@ -1,4 +1,4 @@
-import { resendBookingEmail, updateBookingStatus } from '../../server/bookings.js';
+import { resendBookingEmail, sendBookingReminder, updateBookingStatus } from '../../server/bookings.js';
 
 function isAdminAuthorized(req) {
   if (!process.env.ADMIN_ACCESS_CODE) return true;
@@ -28,12 +28,19 @@ export default async function handler(req, res) {
     const id = req.query.id;
 
     if (req.method === 'POST') {
-      if (req.body?.action !== 'send-email') {
-        res.status(400).json({ ok: false, message: 'Actiune invalida.' });
+      if (req.body?.action === 'send-email') {
+        const result = await resendBookingEmail(id);
+        res.status(200).json({ ok: true, ...result });
         return;
       }
-      const result = await resendBookingEmail(id);
-      res.status(200).json({ ok: true, ...result });
+
+      if (req.body?.action === 'send-reminder') {
+        const result = await sendBookingReminder(id);
+        res.status(200).json({ ok: true, ...result });
+        return;
+      }
+
+      res.status(400).json({ ok: false, message: 'Actiune invalida.' });
       return;
     }
 

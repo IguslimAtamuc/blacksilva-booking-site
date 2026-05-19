@@ -43,6 +43,10 @@ export function getProduct(id) {
   return products.find((product) => product.id === id);
 }
 
+export function getShopProducts() {
+  return products.filter((product) => product.id !== 'none');
+}
+
 export function getNextOpenDays(count = 14) {
   const days = [];
   const today = new Date();
@@ -161,6 +165,11 @@ export function buildCalendarUrl(booking) {
     `SUMMARY:BlackSilva - ${service?.name || 'Programare'}`,
     `DESCRIPTION:Cu ${stylist?.name || 'BlackSilva'}. Rezervare ${booking.id}.`,
     'LOCATION:Badstuestraede 16, 1053 Kobenhavn',
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:BlackSilva reminder - programarea incepe peste o ora',
+    'TRIGGER:-PT1H',
+    'END:VALARM',
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\n');
