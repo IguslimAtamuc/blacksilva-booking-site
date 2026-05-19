@@ -1160,27 +1160,41 @@ a {
   display: grid;
   place-items: center;
   padding: 3rem 1.25rem;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.78)),
-    url('/images/black-forest-hair.png') center / cover fixed no-repeat,
-    #000;
+  overflow-x: hidden;
+  isolation: isolate;
+  background: #000;
 }
 
 .client-stage::before {
   content: '';
   position: fixed;
+  inset: -7dvh 0;
+  z-index: -2;
+  pointer-events: none;
+  background: url('/images/black-forest-hair-front.png') center 43% / auto clamp(860px, 118dvh, 1220px) no-repeat;
+  filter: brightness(0.68) contrast(1.08);
+  opacity: 0.86;
+}
+
+.client-stage::after {
+  content: '';
+  position: fixed;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.08), transparent 20rem),
+    radial-gradient(circle at 50% 43%, rgba(255, 255, 255, 0.08), transparent 18rem),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.3) 36%, rgba(0, 0, 0, 0.82)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.9), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.9)),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  background-size: auto, 42px 42px, 42px 42px;
+  background-size: auto, auto, auto, 42px 42px, 42px 42px;
   mix-blend-mode: screen;
 }
 
 .client-stage .phone-frame {
-  width: min(1040px, 100%);
+  z-index: 1;
+  width: min(820px, 100%);
   height: auto;
   min-height: 0;
   overflow: visible;
@@ -1200,11 +1214,11 @@ a {
   min-height: calc(100dvh - 6rem);
   display: grid;
   align-content: center;
-  gap: 2.25rem;
+  gap: 2rem;
 }
 
 .client-stage .app-header {
-  width: min(1040px, 100%);
+  width: min(820px, 100%);
   position: fixed;
   left: 50%;
   top: 1rem;
@@ -1258,7 +1272,7 @@ a {
 }
 
 .client-stage .app-hero {
-  width: min(760px, 100%);
+  width: min(660px, 100%);
   min-height: 0;
   display: grid;
   justify-items: center;
@@ -1282,11 +1296,11 @@ a {
 
 .client-stage .app-hero > div {
   width: 100%;
-  padding: 2.6rem 2rem;
+  padding: 2.35rem 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.82);
   border-bottom: 1px solid rgba(255, 255, 255, 0.82);
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(3px);
 }
 
 .client-stage .hero-icon {
@@ -1328,13 +1342,14 @@ a {
 }
 
 .client-stage .app-nav-grid {
-  width: min(760px, 100%);
+  width: min(660px, 100%);
   display: flex;
   justify-content: center;
   gap: 0;
   border: 1px solid rgba(255, 255, 255, 0.82);
   border-radius: 0;
-  background: rgba(0, 0, 0, 0.24);
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(3px);
 }
 
 .client-stage .app-nav-grid button {
@@ -1379,10 +1394,11 @@ a {
   width: min(760px, 100%);
   max-height: min(78dvh, 760px);
   overflow: auto;
+  scroll-margin-top: 5rem;
   padding: 2.25rem;
   border: 1px solid rgba(255, 255, 255, 0.82);
   border-radius: 0;
-  background: rgba(6, 6, 7, 0.82);
+  background: rgba(6, 6, 7, 0.88);
   backdrop-filter: blur(8px);
   box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.45);
 }
@@ -1791,8 +1807,38 @@ a {
     padding: 5.5rem 1rem 2rem;
   }
 
+  .client-stage::before {
+    inset: -4dvh 0;
+    background-position: center 39%;
+    background-size: auto 116dvh;
+    opacity: 0.72;
+  }
+
+  .client-stage::after {
+    background:
+      radial-gradient(circle at 50% 34%, rgba(255, 255, 255, 0.08), transparent 16rem),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.34) 32%, rgba(0, 0, 0, 0.9)),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.74), transparent 34%, transparent 66%, rgba(0, 0, 0, 0.74)),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+    background-size: auto, auto, auto, 42px 42px, 42px 42px;
+  }
+
   .client-stage .app-shell {
     min-height: calc(100dvh - 7.5rem);
+    align-content: start;
+  }
+
+  .client-stage .app-header {
+    top: 0;
+    padding: 0.85rem 1rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.52));
+    backdrop-filter: blur(12px);
+  }
+
+  .client-stage .client-screen {
+    gap: 1.55rem;
   }
 
   .client-stage .app-nav-grid {
@@ -1812,6 +1858,7 @@ a {
   .client-stage .confirmation-screen,
   .client-stage .launcher-screen {
     max-height: none;
+    scroll-margin-top: 6.75rem;
     padding: 1.5rem;
   }
 
@@ -1872,6 +1919,10 @@ a {
     padding: 0;
   }
 
+  .client-stage {
+    padding: 5.75rem 0.85rem 1.75rem;
+  }
+
   .phone-frame {
     width: 100%;
     height: 100dvh;
@@ -1895,6 +1946,10 @@ a {
 
   .client-stage .app-shell {
     height: auto;
+  }
+
+  .client-stage .app-hero > div {
+    padding: 2rem 1.25rem;
   }
 
   .tailadmin-app .admin-stats,

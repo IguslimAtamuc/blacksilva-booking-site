@@ -704,6 +704,16 @@ function ClientApp() {
     if (profile.email) loadClientBookings(profile.email);
   }, [profile.email]);
 
+  useEffect(() => {
+    if (view !== 'book' || step === 0) return undefined;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.querySelector('.client-stage .step-screen')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [step, view]);
+
   const canContinue = [
     Boolean(selection.serviceId),
     Boolean(selection.stylistId),
