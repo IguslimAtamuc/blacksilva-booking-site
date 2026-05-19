@@ -1280,6 +1280,7 @@ a {
   width: min(660px, 100%);
   min-height: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: 1.75rem;
   padding: 0;
