@@ -1154,6 +1154,713 @@ a {
   padding: 16px;
 }
 
+/* HTML5 UP Dimension inspired client site */
+.client-stage {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 3rem 1.25rem;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.78)),
+    url('/images/black-forest-hair.png') center / cover fixed no-repeat,
+    #000;
+}
+
+.client-stage::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.08), transparent 20rem),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: auto, 42px 42px, 42px 42px;
+  mix-blend-mode: screen;
+}
+
+.client-stage .phone-frame {
+  width: min(1040px, 100%);
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.client-stage .phone-island,
+.client-stage .statusbar {
+  display: none;
+}
+
+.client-stage .app-shell {
+  height: auto;
+  min-height: calc(100dvh - 6rem);
+  display: grid;
+  align-content: center;
+  gap: 2.25rem;
+}
+
+.client-stage .app-header {
+  width: min(1040px, 100%);
+  position: fixed;
+  left: 50%;
+  top: 1rem;
+  z-index: 20;
+  transform: translateX(-50%);
+  padding: 0 1rem;
+}
+
+.client-stage .mini-brand {
+  color: #fff;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.8);
+}
+
+.client-stage .mini-brand span {
+  width: 46px;
+  height: 46px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.48);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .mini-brand strong {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.client-stage .swap-link {
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.42);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .screen {
+  width: min(880px, 100%);
+  margin: 0 auto;
+  overflow: visible;
+  padding: 0;
+}
+
+.client-stage .client-screen {
+  display: grid;
+  gap: 2rem;
+  place-items: center;
+}
+
+.client-stage .app-hero {
+  width: min(760px, 100%);
+  min-height: 0;
+  display: grid;
+  justify-items: center;
+  gap: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+
+.client-stage .app-hero::before,
+.client-stage .app-hero::after {
+  content: '';
+  width: 1px;
+  height: 3.25rem;
+  background: rgba(255, 255, 255, 0.78);
+  order: -2;
+}
+
+.client-stage .app-hero > div {
+  width: 100%;
+  padding: 2.6rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.82);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.client-stage .hero-icon {
+  order: -3;
+  width: 5.25rem;
+  height: 5.25rem;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.36);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .screen-kicker,
+.client-stage .list-group h2 {
+  color: rgba(255, 255, 255, 0.76);
+  letter-spacing: 0.18em;
+}
+
+.client-stage .app-hero h1,
+.client-stage .step-screen h1,
+.client-stage .confirmation-screen h1,
+.client-stage .launcher-screen h1 {
+  color: #fff;
+  font-size: clamp(2.45rem, 8vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.client-stage .app-hero p,
+.client-stage .fine-copy,
+.client-stage .confirmation-screen p,
+.client-stage .launcher-screen p {
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.client-stage .app-nav-grid {
+  width: min(760px, 100%);
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.client-stage .app-nav-grid button {
+  min-width: 8.4rem;
+  min-height: 3.25rem;
+  flex: 1 1 0;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.client-stage .app-nav-grid button:first-child {
+  border-left: 0;
+}
+
+.client-stage .app-nav-grid .rent-button {
+  grid-column: auto;
+}
+
+.client-stage .app-nav-grid button.selected,
+.client-stage .app-nav-grid button:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .app-nav-grid svg,
+.client-stage .app-nav-grid button.selected svg,
+.client-stage .app-nav-grid button:hover svg,
+.client-stage .wide-action svg {
+  color: #fff;
+}
+
+.client-stage .step-screen,
+.client-stage .confirmation-screen,
+.client-stage .launcher-screen {
+  width: min(760px, 100%);
+  max-height: min(78dvh, 760px);
+  overflow: auto;
+  padding: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 0;
+  background: rgba(6, 6, 7, 0.82);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.45);
+}
+
+.client-stage .mobile-progress {
+  width: min(760px, 100%);
+}
+
+.client-stage .mobile-progress span {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.client-stage .mobile-progress span.active {
+  background: #fff;
+  box-shadow: none;
+}
+
+.client-stage .big-button,
+.client-stage .review-card,
+.client-stage .product-card,
+.client-stage .mini-card,
+.client-stage .cart-summary,
+.client-stage .day-card,
+.client-stage .empty-state,
+.client-stage .error-box,
+.client-stage .addons-panel button,
+.client-stage .payment-options button,
+.client-stage .wide-action,
+.client-stage .day-rail button,
+.client-stage .slot-grid button,
+.client-stage .footer-primary,
+.client-stage .footer-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .big-button.selected,
+.client-stage .addons-panel button.selected,
+.client-stage .day-rail button.selected,
+.client-stage .slot-grid button.selected,
+.client-stage .payment-options button.selected,
+.client-stage .product-actions button.selected {
+  background: #fff;
+  color: #000;
+}
+
+.client-stage .big-button.selected *,
+.client-stage .addons-panel button.selected *,
+.client-stage .day-rail button.selected *,
+.client-stage .slot-grid button.selected *,
+.client-stage .payment-options button.selected * {
+  color: #000;
+}
+
+.client-stage .form-stack input,
+.client-stage .form-stack textarea,
+.client-stage .addons-panel select {
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.38);
+  color: #fff;
+  box-shadow: none;
+}
+
+.client-stage .app-footer {
+  position: static;
+  margin-top: 0;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.84) 45%);
+}
+
+.client-stage .footer-primary {
+  background: #fff;
+  color: #000;
+}
+
+/* TailAdmin inspired admin website */
+.tailadmin-app {
+  min-height: 100dvh;
+  display: flex;
+  background: #f7f7f7;
+  color: #111;
+  font-family: var(--font-body);
+}
+
+.tailadmin-sidebar {
+  position: sticky;
+  top: 0;
+  width: 290px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-right: 1px solid #e6e6e6;
+  background: #050505;
+  color: #fff;
+}
+
+.tailadmin-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+}
+
+.tailadmin-logo span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #fff;
+  border-radius: 12px;
+  font-weight: 900;
+}
+
+.tailadmin-logo strong {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.tailadmin-section-label {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tailadmin-client-link {
+  margin-top: auto;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.tailadmin-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.tailadmin-header {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid #e6e6e6;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+}
+
+.tailadmin-header span {
+  display: block;
+  color: #667085;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tailadmin-header strong {
+  display: block;
+  color: #101828;
+  font-size: 1.05rem;
+}
+
+.tailadmin-header button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+}
+
+.tailadmin-app .screen {
+  width: 100%;
+  min-height: auto;
+  overflow: visible;
+  padding: 1.5rem;
+}
+
+.tailadmin-app .admin-screen {
+  max-width: 1500px;
+  margin: 0 auto;
+  gap: 1.5rem;
+}
+
+.tailadmin-app .admin-hero {
+  min-height: 0;
+  padding: 1.5rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.tailadmin-app .admin-hero .screen-kicker,
+.tailadmin-app .screen-kicker {
+  color: #667085;
+  letter-spacing: 0;
+}
+
+.tailadmin-app .admin-hero h1,
+.tailadmin-app .step-screen h1 {
+  color: #101828;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+}
+
+.tailadmin-app .admin-hero p,
+.tailadmin-app .fine-copy {
+  color: #667085;
+}
+
+.tailadmin-app .icon-button {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  background: #fff;
+  color: #111;
+  box-shadow: none;
+}
+
+.tailadmin-app .admin-stats,
+.tailadmin-app .dashboard-grid {
+  gap: 1rem;
+}
+
+.tailadmin-app .stat-card,
+.tailadmin-app .admin-booking-card,
+.tailadmin-app .search-box,
+.tailadmin-app .empty-state,
+.tailadmin-app .error-box,
+.tailadmin-app .product-card,
+.tailadmin-app .mini-card,
+.tailadmin-app .insight-card,
+.tailadmin-app .day-card,
+.tailadmin-app .cart-summary,
+.tailadmin-app .review-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background: #fff;
+  color: #101828;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.tailadmin-app .stat-card {
+  min-height: 132px;
+  padding: 1.25rem;
+}
+
+.tailadmin-app .stat-card span,
+.tailadmin-app .mini-card span,
+.tailadmin-app .product-card span,
+.tailadmin-app .cart-summary span,
+.tailadmin-app .insight-card span,
+.tailadmin-app .booking-card-top small,
+.tailadmin-app .booking-meta,
+.tailadmin-app .admin-booking-card p,
+.tailadmin-app .payment-options small,
+.tailadmin-app .product-card small,
+.tailadmin-app .mini-card small,
+.tailadmin-app .insight-card small,
+.tailadmin-app .calendar-row small {
+  color: #667085;
+}
+
+.tailadmin-app .stat-card strong,
+.tailadmin-app .admin-booking-card strong,
+.tailadmin-app .product-card strong,
+.tailadmin-app .mini-card strong,
+.tailadmin-app .insight-card strong,
+.tailadmin-app .day-card h2,
+.tailadmin-app .product-card b,
+.tailadmin-app .mini-card b,
+.tailadmin-app .cart-summary strong,
+.tailadmin-app .calendar-row time {
+  color: #101828;
+}
+
+.tailadmin-app .stat-card svg {
+  color: #101828;
+}
+
+.tailadmin-app .admin-screen > .admin-tabs {
+  display: none;
+}
+
+.tailadmin-app .sidebar-tabs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+  min-height: 0;
+  padding: 0;
+}
+
+.tailadmin-app .sidebar-tabs button {
+  min-height: 46px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  box-shadow: none;
+  font-size: 0.9rem;
+  text-transform: none;
+}
+
+.tailadmin-app .sidebar-tabs button svg {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tailadmin-app .sidebar-tabs button.selected {
+  background: #fff;
+  color: #000;
+  box-shadow: none;
+}
+
+.tailadmin-app .sidebar-tabs button.selected svg {
+  color: #000;
+}
+
+.tailadmin-app .filter-rail button,
+.tailadmin-app .status-actions button,
+.tailadmin-app .email-action,
+.tailadmin-app .wide-action,
+.tailadmin-app .product-actions button {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  background: #fff;
+  color: #101828;
+  box-shadow: none;
+}
+
+.tailadmin-app .filter-rail button.selected,
+.tailadmin-app .status-actions button.selected,
+.tailadmin-app .product-actions button.selected {
+  background: #101828;
+  color: #fff;
+}
+
+.tailadmin-app .form-stack input,
+.tailadmin-app .form-stack textarea,
+.tailadmin-app .addons-panel select,
+.tailadmin-app .search-box input {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  background: #fff;
+  color: #101828;
+  box-shadow: none;
+}
+
+.tailadmin-app .status-pill,
+.tailadmin-app .email-pill {
+  border: 1px solid #e6e6e6;
+  background: #f7f7f7;
+  color: #101828;
+}
+
+.tailadmin-login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.tailadmin-login .launcher-screen {
+  width: min(460px, 100%);
+  padding: 2rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 18px;
+  background: #fff;
+  color: #101828;
+  box-shadow: 0 18px 50px rgba(16, 24, 40, 0.12);
+}
+
+.tailadmin-login h1,
+.tailadmin-login p,
+.tailadmin-login label {
+  color: #101828;
+}
+
+@media (max-width: 900px) {
+  .client-stage {
+    padding: 5.5rem 1rem 2rem;
+  }
+
+  .client-stage .app-shell {
+    min-height: calc(100dvh - 7.5rem);
+  }
+
+  .client-stage .app-nav-grid {
+    flex-direction: column;
+  }
+
+  .client-stage .app-nav-grid button {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.82);
+  }
+
+  .client-stage .app-nav-grid button:first-child {
+    border-top: 0;
+  }
+
+  .client-stage .step-screen,
+  .client-stage .confirmation-screen,
+  .client-stage .launcher-screen {
+    max-height: none;
+    padding: 1.5rem;
+  }
+
+  .tailadmin-app {
+    display: block;
+  }
+
+  .tailadmin-sidebar {
+    display: none;
+  }
+
+  .tailadmin-header {
+    min-height: 64px;
+    padding: 0 1rem;
+  }
+
+  .tailadmin-app .screen {
+    padding: 1rem;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button {
+    min-height: 60px;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    background: #fff;
+    color: #101828;
+    box-shadow: none;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button svg {
+    color: #101828;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button.selected {
+    background: #101828;
+    color: #fff;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button.selected svg {
+    color: #fff;
+  }
+}
+
 @media (max-width: 520px) {
   body {
     background: #000;
@@ -1184,6 +1891,23 @@ a {
 
   .app-shell {
     height: calc(100% - 46px);
+  }
+
+  .client-stage .app-shell {
+    height: auto;
+  }
+
+  .tailadmin-app .admin-stats,
+  .tailadmin-app .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button {
+    font-size: 0;
+  }
+
+  .tailadmin-app .admin-screen > .admin-tabs button span {
+    display: none;
   }
 }
 

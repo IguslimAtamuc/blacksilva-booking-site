@@ -125,7 +125,7 @@ async function apiFetch(path, options = {}) {
 
 function PhoneFrame({ app, children }) {
   return (
-    <div className="phone-stage">
+    <div className={cx('phone-stage', `${app}-stage`)}>
       <div className="phone-frame">
         <div className="phone-island" />
         <div className="statusbar">
@@ -144,6 +144,36 @@ function PhoneFrame({ app, children }) {
           </header>
           {children}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminShell({ activeTab, setActiveTab, onRefresh, children }) {
+  return (
+    <div className="tailadmin-app">
+      <aside className="tailadmin-sidebar">
+        <a className="tailadmin-logo" href="/admin">
+          <span>BS</span>
+          <strong>BlackSilva</strong>
+        </a>
+        <p className="tailadmin-section-label">Menu</p>
+        <AdminTabs active={activeTab} setActive={setActiveTab} variant="sidebar" />
+        <a className="tailadmin-client-link" href="/client">
+          Client website
+        </a>
+      </aside>
+      <div className="tailadmin-main">
+        <header className="tailadmin-header">
+          <div>
+            <span>BlackSilva Admin</span>
+            <strong>Salon management</strong>
+          </div>
+          <button type="button" onClick={onRefresh} aria-label="Refresh admin">
+            <RefreshCw size={18} />
+          </button>
+        </header>
+        {children}
       </div>
     </div>
   );
@@ -891,7 +921,7 @@ function AdminBookingCard({ booking, onStatus, onEmail, onReminder }) {
   );
 }
 
-function AdminTabs({ active, setActive }) {
+function AdminTabs({ active, setActive, variant = 'inline' }) {
   const tabs = [
     { id: 'dashboard', label: 'Summary', icon: <BarChart3 size={18} /> },
     { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={18} /> },
@@ -901,7 +931,7 @@ function AdminTabs({ active, setActive }) {
   ];
 
   return (
-    <div className="admin-tabs">
+    <div className={cx('admin-tabs', variant === 'sidebar' && 'sidebar-tabs')}>
       {tabs.map((tab) => (
         <button type="button" key={tab.id} className={active === tab.id ? 'selected' : ''} onClick={() => setActive(tab.id)}>
           {tab.icon}
@@ -1160,8 +1190,8 @@ function AdminApp() {
 
   if (error === 'Admin code required.') {
     return (
-      <PhoneFrame app="admin">
-        <main className="screen launcher-screen">
+      <div className="tailadmin-app tailadmin-login">
+        <main className="launcher-screen">
           <div className="hero-mark">
             <ShieldCheck size={26} />
           </div>
@@ -1186,12 +1216,12 @@ function AdminApp() {
             </button>
           </div>
         </main>
-      </PhoneFrame>
+      </div>
     );
   }
 
   return (
-    <PhoneFrame app="admin">
+    <AdminShell activeTab={activeTab} setActiveTab={setActiveTab} onRefresh={load}>
       <main className="screen admin-screen">
         <section className="app-hero admin-hero">
           <div>
@@ -1258,7 +1288,7 @@ function AdminApp() {
           </>
         )}
       </main>
-    </PhoneFrame>
+    </AdminShell>
   );
 }
 
