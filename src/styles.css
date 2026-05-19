@@ -1409,6 +1409,21 @@ a {
   box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.45);
 }
 
+.client-stage .auth-card {
+  justify-items: center;
+  text-align: center;
+}
+
+.client-stage .auth-card .form-stack,
+.client-stage .auth-card .wide-action {
+  width: min(620px, 100%);
+}
+
+.client-stage .auth-card .form-stack label {
+  width: 100%;
+  text-align: left;
+}
+
 .client-stage .mobile-progress {
   width: min(760px, 100%);
 }
