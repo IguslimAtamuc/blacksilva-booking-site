@@ -1,19 +1,31 @@
 :root {
-  --bg: #030303;
-  --phone: #070706;
-  --surface: #0e0d0b;
-  --surface-2: #17130e;
-  --line: rgba(245, 239, 228, 0.12);
-  --line-strong: rgba(245, 239, 228, 0.24);
-  --ink: #f7efe2;
-  --muted: rgba(247, 239, 226, 0.68);
-  --dim: rgba(247, 239, 226, 0.42);
-  --accent: #d6b46e;
-  --accent-2: #f3db9b;
-  --danger: #e8897b;
-  --success: #a9d69a;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Manrope', system-ui, sans-serif;
+  --bg: #050506;
+  --phone: #090a0d;
+  --surface: #17181b;
+  --surface-2: #202126;
+  --surface-3: #111215;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #f8f8f2;
+  --muted: rgba(248, 248, 242, 0.66);
+  --dim: rgba(248, 248, 242, 0.38);
+  --accent: #ffd21a;
+  --accent-2: #ffe875;
+  --danger: #ff6b5f;
+  --success: #47e06f;
+  --cyan: #46d7ff;
+  --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
+  --radius-xl: 34px;
+  --radius-lg: 26px;
+  --radius-md: 20px;
+  --shadow-soft:
+    14px 18px 34px rgba(0, 0, 0, 0.56),
+    -8px -8px 22px rgba(255, 255, 255, 0.035),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.055);
+  --shadow-pressed:
+    inset 9px 9px 18px rgba(0, 0, 0, 0.52),
+    inset -5px -5px 14px rgba(255, 255, 255, 0.045);
 }
 
 * {
@@ -29,8 +41,9 @@ body,
 body {
   margin: 0;
   background:
-    linear-gradient(135deg, rgba(214, 180, 110, 0.07) 0 1px, transparent 1px 18px),
-    radial-gradient(circle at 50% 0%, rgba(214, 180, 110, 0.16), transparent 26rem),
+    radial-gradient(circle at 18% 8%, rgba(255, 210, 26, 0.14), transparent 22rem),
+    radial-gradient(circle at 90% 88%, rgba(70, 215, 255, 0.08), transparent 20rem),
+    linear-gradient(135deg, #050506, #101114 48%, #050506),
     #000;
   color: var(--ink);
   font-family: var(--font-body);
@@ -49,12 +62,30 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+button,
+a,
+input,
+select,
+textarea {
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+button:active,
+a:active {
+  transform: scale(0.98);
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(243, 219, 155, 0.8);
+  outline: 2px solid rgba(255, 210, 26, 0.9);
   outline-offset: 3px;
 }
 
@@ -68,7 +99,7 @@ a {
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 22px;
+  padding: 20px;
 }
 
 .phone-frame {
@@ -77,14 +108,14 @@ a {
   height: min(900px, calc(100dvh - 44px));
   min-height: 720px;
   overflow: hidden;
-  border: 1px solid rgba(245, 239, 228, 0.12);
-  border-radius: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 58px;
   background:
-    linear-gradient(180deg, rgba(245, 239, 228, 0.025), transparent 20%),
-    linear-gradient(160deg, #090909 0%, var(--phone) 54%, #0d0905 100%);
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 26, 0.08), transparent 18rem),
+    linear-gradient(160deg, #111216 0%, var(--phone) 54%, #050506 100%);
   box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.72),
-    inset 0 0 0 1px rgba(245, 239, 228, 0.06);
+    0 42px 100px rgba(0, 0, 0, 0.82),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.055);
 }
 
 .phone-island {
@@ -126,7 +157,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 10px 22px 16px;
+  padding: 10px 22px 14px;
 }
 
 .mini-brand {
@@ -141,18 +172,22 @@ a {
   place-items: center;
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(214, 180, 110, 0.55);
-  color: var(--accent-2);
+  border: 0;
+  border-radius: 15px;
+  background: var(--accent);
+  color: #090a0d;
   font-family: var(--font-display);
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 950;
+  box-shadow: 0 0 22px rgba(255, 210, 26, 0.26);
 }
 
 .mini-brand strong {
   overflow: hidden;
   font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 950;
+  letter-spacing: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -163,18 +198,21 @@ a {
   align-items: center;
   padding: 0 12px;
   border: 1px solid var(--line);
+  border-radius: 999px;
   color: var(--accent-2);
   font-size: 12px;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: var(--shadow-soft);
 }
 
 .screen {
   min-height: 0;
   flex: 1;
   overflow: auto;
-  padding: 0 22px 22px;
+  padding: 0 20px 22px;
 }
 
 .screen::-webkit-scrollbar,
@@ -189,7 +227,8 @@ a {
 .stack-list::-webkit-scrollbar-thumb,
 .day-rail::-webkit-scrollbar-thumb,
 .filter-rail::-webkit-scrollbar-thumb {
-  background: rgba(214, 180, 110, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 210, 26, 0.42);
 }
 
 .launcher-screen,
@@ -203,16 +242,17 @@ a {
 .success-badge {
   display: grid;
   place-items: center;
-  width: 66px;
-  height: 66px;
-  border: 1px solid rgba(214, 180, 110, 0.45);
-  background: rgba(214, 180, 110, 0.12);
-  color: var(--accent-2);
+  width: 74px;
+  height: 74px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--surface-2);
+  color: var(--accent);
+  box-shadow: var(--shadow-soft);
 }
 
 .success-badge {
-  border-color: rgba(169, 214, 154, 0.45);
-  background: rgba(169, 214, 154, 0.12);
+  background: rgba(71, 224, 111, 0.13);
   color: var(--success);
 }
 
@@ -222,9 +262,9 @@ a {
 .step-screen h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 500;
-  line-height: 0.96;
+  font-size: 42px;
+  font-weight: 950;
+  line-height: 0.94;
   letter-spacing: 0;
 }
 
@@ -249,16 +289,18 @@ a {
 .launcher-actions button,
 .confirmation-actions a,
 .confirmation-actions button {
-  min-height: 58px;
+  min-height: 62px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 1px solid rgba(214, 180, 110, 0.45);
-  background: linear-gradient(135deg, rgba(214, 180, 110, 0.16), rgba(214, 180, 110, 0.04));
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
   color: var(--ink);
   cursor: pointer;
   font-weight: 900;
+  box-shadow: var(--shadow-soft);
 }
 
 .client-screen,
@@ -273,16 +315,21 @@ a {
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
+  min-height: 176px;
+  padding: 23px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: var(--radius-xl);
   background:
-    linear-gradient(180deg, rgba(245, 239, 228, 0.055), transparent),
+    radial-gradient(circle at 82% 14%, rgba(255, 210, 26, 0.18), transparent 7rem),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.055), transparent 42%),
     var(--surface);
+  box-shadow: var(--shadow-soft);
 }
 
 .admin-hero {
   background:
-    linear-gradient(180deg, rgba(214, 180, 110, 0.08), transparent),
+    radial-gradient(circle at 82% 14%, rgba(70, 215, 255, 0.14), transparent 7rem),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.055), transparent 42%),
     var(--surface);
 }
 
@@ -292,7 +339,7 @@ a {
   color: var(--accent-2);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.22em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -301,11 +348,13 @@ a {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
-  border: 1px solid var(--line);
-  color: var(--accent-2);
-  background: rgba(245, 239, 228, 0.04);
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 22px;
+  color: #090a0d;
+  background: var(--accent);
+  box-shadow: 0 0 34px rgba(255, 210, 26, 0.24);
 }
 
 .icon-button {
@@ -315,23 +364,24 @@ a {
 .mobile-progress {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 7px;
+  gap: 9px;
 }
 
 .mobile-progress span {
-  height: 4px;
+  height: 6px;
   border-radius: 999px;
-  background: rgba(245, 239, 228, 0.16);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .mobile-progress span.active {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(255, 210, 26, 0.42);
 }
 
 .app-nav-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .app-nav-grid button,
@@ -341,17 +391,19 @@ a {
 .product-actions button,
 .cart-summary button,
 .mini-card a {
-  min-height: 52px;
+  min-height: 58px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
-  border: 1px solid var(--line);
-  background: rgba(245, 239, 228, 0.04);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
   color: var(--ink);
   cursor: pointer;
   font-size: 12px;
   font-weight: 900;
+  box-shadow: var(--shadow-soft);
 }
 
 .app-nav-grid button svg,
@@ -365,13 +417,24 @@ a {
 .admin-tabs button.selected,
 .payment-options button.selected,
 .product-actions button.selected {
-  border-color: rgba(214, 180, 110, 0.68);
-  background: linear-gradient(180deg, rgba(214, 180, 110, 0.16), rgba(214, 180, 110, 0.035));
+  background: var(--accent);
+  color: #090a0d;
+  box-shadow:
+    0 0 28px rgba(255, 210, 26, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+
+.app-nav-grid button.selected svg,
+.app-nav-grid button:hover svg,
+.admin-tabs button.selected svg,
+.payment-options button.selected svg,
+.product-actions button.selected svg {
+  color: #090a0d;
 }
 
 .app-nav-grid .rent-button {
   grid-column: 1 / -1;
-  min-height: 58px;
+  min-height: 66px;
   color: var(--accent-2);
 }
 
@@ -402,23 +465,25 @@ a {
   color: var(--dim);
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: 0.2em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
 .big-button {
   width: 100%;
-  min-height: 88px;
+  min-height: 96px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--line);
-  background: rgba(245, 239, 228, 0.035);
+  padding: 18px;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
   color: var(--ink);
   cursor: pointer;
   text-align: left;
+  box-shadow: var(--shadow-soft);
 }
 
 .big-button.selected,
@@ -427,8 +492,11 @@ a {
 .slot-grid button.selected,
 .filter-rail button.selected,
 .status-actions button.selected {
-  border-color: rgba(214, 180, 110, 0.78);
-  background: linear-gradient(180deg, rgba(214, 180, 110, 0.16), rgba(214, 180, 110, 0.035));
+  background: var(--accent);
+  color: #08090b;
+  box-shadow:
+    0 0 26px rgba(255, 210, 26, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
 }
 
 .big-button strong,
@@ -436,8 +504,8 @@ a {
 .admin-booking-card strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 23px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 950;
   line-height: 1.08;
 }
 
@@ -455,9 +523,23 @@ a {
 .big-button b {
   color: var(--accent-2);
   font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 21px;
+  font-weight: 950;
   text-align: right;
+}
+
+.big-button.selected b,
+.big-button.selected small,
+.big-button.selected strong,
+.payment-options button.selected strong,
+.payment-options button.selected small,
+.product-actions button.selected,
+.addons-panel button.selected small,
+.addons-panel button.selected strong,
+.day-rail button.selected span,
+.filter-rail button.selected,
+.status-actions button.selected {
+  color: #08090b;
 }
 
 .big-button b small {
@@ -473,19 +555,22 @@ a {
   place-items: center;
   width: 56px;
   height: 56px;
-  border: 1px solid rgba(214, 180, 110, 0.5);
-  color: var(--accent-2);
+  border: 0;
+  border-radius: 22px;
+  background: #090a0d;
+  color: var(--accent);
   font-family: var(--font-display);
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 950;
+  box-shadow: var(--shadow-pressed);
 }
 
 .day-rail,
 .filter-rail {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 128px;
-  gap: 8px;
+  grid-auto-columns: 132px;
+  gap: 10px;
   overflow-x: auto;
   padding-bottom: 5px;
 }
@@ -494,12 +579,14 @@ a {
 .slot-grid button,
 .filter-rail button,
 .status-actions button {
-  min-height: 54px;
-  border: 1px solid var(--line);
-  background: rgba(245, 239, 228, 0.035);
+  min-height: 58px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--surface);
   color: var(--ink);
   cursor: pointer;
   font-weight: 900;
+  box-shadow: var(--shadow-soft);
 }
 
 .day-rail button span {
@@ -512,13 +599,14 @@ a {
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .slot-grid button:disabled {
   cursor: not-allowed;
-  color: rgba(247, 239, 226, 0.22);
-  background: rgba(245, 239, 228, 0.02);
+  color: rgba(248, 248, 242, 0.22);
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: none;
 }
 
 .form-stack,
@@ -535,7 +623,7 @@ a {
   color: var(--dim);
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -545,11 +633,12 @@ a {
 .search-box input {
   width: 100%;
   min-height: 52px;
-  border: 1px solid var(--line);
-  border-radius: 0;
-  background: rgba(0, 0, 0, 0.24);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-3);
   color: var(--ink);
   padding: 0 14px;
+  box-shadow: var(--shadow-pressed);
 }
 
 .form-stack textarea {
@@ -559,16 +648,18 @@ a {
 }
 
 .addons-panel button {
-  min-height: 74px;
+  min-height: 78px;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 12px;
-  border: 1px solid var(--line);
-  background: rgba(245, 239, 228, 0.035);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
   color: var(--ink);
   cursor: pointer;
   text-align: left;
+  box-shadow: var(--shadow-soft);
 }
 
 .payment-options {
@@ -577,9 +668,9 @@ a {
 }
 
 .payment-options button {
-  min-height: 74px;
+  min-height: 82px;
   justify-content: flex-start;
-  padding: 13px;
+  padding: 15px;
   text-align: left;
 }
 
@@ -590,8 +681,8 @@ a {
 .calendar-row strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 19px;
+  font-weight: 950;
   line-height: 1.08;
 }
 
@@ -628,12 +719,14 @@ a {
 .insight-card,
 .day-card,
 .cart-summary {
-  border: 1px solid var(--line);
-  background: rgba(245, 239, 228, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
 }
 
 .review-card {
-  padding: 16px;
+  padding: 18px;
 }
 
 .summary-rows {
@@ -652,7 +745,7 @@ a {
   color: var(--dim);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -690,7 +783,7 @@ a {
   bottom: 0;
   z-index: 3;
   display: grid;
-  grid-template-columns: 58px 1fr;
+  grid-template-columns: 62px 1fr;
   gap: 10px;
   margin-top: auto;
   padding-top: 14px;
@@ -699,10 +792,12 @@ a {
 
 .footer-primary,
 .footer-secondary {
-  min-height: 56px;
-  border: 1px solid var(--line);
+  min-height: 62px;
+  border: 0;
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 900;
+  box-shadow: var(--shadow-soft);
 }
 
 .footer-primary {
@@ -710,15 +805,14 @@ a {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border-color: transparent;
-  background: linear-gradient(135deg, #f3db9b, #d6b46e);
-  color: #1a1206;
+  background: var(--accent);
+  color: #07080a;
 }
 
 .footer-secondary {
   display: grid;
   place-items: center;
-  background: rgba(245, 239, 228, 0.045);
+  background: var(--surface-2);
   color: var(--ink);
 }
 
@@ -731,13 +825,13 @@ a {
 .admin-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .dashboard-grid .insight-card {
@@ -745,11 +839,11 @@ a {
 }
 
 .stat-card {
-  min-height: 84px;
+  min-height: 92px;
   display: grid;
   align-content: center;
   gap: 4px;
-  padding: 12px;
+  padding: 14px;
 }
 
 .stat-card svg {
@@ -760,20 +854,21 @@ a {
   color: var(--dim);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
 .stat-card strong {
   overflow: hidden;
   color: var(--ink);
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 950;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .search-box {
-  min-height: 52px;
+  min-height: 58px;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -787,6 +882,7 @@ a {
   border: 0;
   background: transparent;
   padding: 0;
+  box-shadow: none;
 }
 
 .filter-rail {
@@ -797,21 +893,21 @@ a {
 
 .admin-tabs {
   display: grid;
-  grid-template-columns: repeat(5, minmax(64px, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 6px;
-  min-height: 61px;
-  overflow-x: auto;
+  min-height: 70px;
+  overflow: visible;
   padding-bottom: 3px;
 }
 
 .admin-tabs button {
-  min-width: 64px;
-  min-height: 58px;
+  min-width: 0;
+  min-height: 66px;
   flex-direction: column;
   gap: 5px;
-  padding: 8px 4px;
-  font-size: 9px;
-  letter-spacing: 0.04em;
+  padding: 8px 3px;
+  font-size: 8px;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -826,7 +922,7 @@ a {
 .admin-booking-card {
   display: grid;
   gap: 10px;
-  padding: 15px;
+  padding: 16px;
 }
 
 .booking-card-top {
@@ -841,11 +937,13 @@ a {
   align-items: center;
   min-height: 28px;
   padding: 0 10px;
-  border: 1px solid var(--line);
-  color: var(--accent-2);
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 210, 26, 0.12);
+  color: var(--accent);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -865,25 +963,27 @@ a {
   gap: 7px;
   min-height: 30px;
   padding: 0 10px;
-  border: 1px solid var(--line);
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
   color: var(--muted);
   font-size: 11px;
   font-weight: 900;
 }
 
 .email-pill.sent {
-  border-color: rgba(169, 214, 154, 0.38);
+  background: rgba(71, 224, 111, 0.12);
   color: var(--success);
 }
 
 .email-pill.failed,
 .email-pill.not-configured {
-  border-color: rgba(232, 137, 123, 0.34);
+  background: rgba(255, 107, 95, 0.12);
   color: var(--danger);
 }
 
 .email-pill.sending {
-  border-color: rgba(214, 180, 110, 0.45);
+  background: rgba(255, 210, 26, 0.12);
   color: var(--accent-2);
 }
 
@@ -910,33 +1010,35 @@ a {
 .status-actions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 7px;
+  gap: 8px;
 }
 
 .status-actions button {
-  min-height: 40px;
+  min-height: 44px;
   font-size: 10px;
 }
 
 .email-action {
-  min-height: 44px;
+  min-height: 50px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid rgba(214, 180, 110, 0.45);
-  background: rgba(214, 180, 110, 0.08);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
   color: var(--accent-2);
   cursor: pointer;
   font-size: 12px;
   font-weight: 900;
+  box-shadow: var(--shadow-soft);
 }
 
 .compact-list,
 .shop-list,
 .calendar-list {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .mini-card,
@@ -944,7 +1046,7 @@ a {
 .cart-summary,
 .insight-card,
 .day-card {
-  padding: 14px;
+  padding: 16px;
 }
 
 .mini-card {
@@ -962,7 +1064,7 @@ a {
   color: var(--dim);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -972,7 +1074,7 @@ a {
   color: var(--accent-2);
   font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 950;
 }
 
 .mini-card a {
@@ -992,11 +1094,11 @@ a {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .product-actions button {
-  min-height: 42px;
+  min-height: 48px;
 }
 
 .cart-summary {
@@ -1008,9 +1110,8 @@ a {
 
 .cart-summary button {
   grid-column: 1 / -1;
-  border-color: rgba(214, 180, 110, 0.45);
-  background: rgba(214, 180, 110, 0.08);
-  color: var(--accent-2);
+  background: var(--accent);
+  color: #07080a;
 }
 
 .calendar-list {
@@ -1026,8 +1127,8 @@ a {
   margin: 0;
   color: var(--accent-2);
   font-family: var(--font-display);
-  font-size: 23px;
-  font-weight: 500;
+  font-size: 22px;
+  font-weight: 950;
 }
 
 .calendar-row {
@@ -1045,8 +1146,7 @@ a {
 }
 
 .wide-action {
-  border-color: rgba(214, 180, 110, 0.45);
-  background: rgba(214, 180, 110, 0.08);
+  background: var(--surface-2);
   color: var(--accent-2);
 }
 

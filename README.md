@@ -1,6 +1,7 @@
 # BlackSilva Booking Website
 
 Sistem de booking pentru un singur salon BlackSilva, inspirat vizual din prototipul mobil existent.
+Interfata este adaptata intr-un stil dark, rotunjit, watchOS/Boro UI inspired, optimizat pentru telefon.
 
 ## Ce include
 
