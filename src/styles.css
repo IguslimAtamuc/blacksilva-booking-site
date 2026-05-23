@@ -26,6 +26,13 @@
   --shadow-pressed:
     inset 9px 9px 18px rgba(0, 0, 0, 0.52),
     inset -5px -5px 14px rgba(255, 255, 255, 0.045);
+  --stable-screen: 100vh;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --stable-screen: 100svh;
+  }
 }
 
 * {
@@ -36,8 +43,15 @@ html,
 body,
 #root {
   min-height: 100%;
+  min-height: var(--stable-screen);
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 * {
@@ -61,6 +75,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 button,
@@ -68,6 +83,12 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
 }
 
 button,
@@ -80,6 +101,7 @@ a,
 input,
 select,
 textarea {
+  touch-action: manipulation;
   transition:
     background 160ms ease,
     color 160ms ease,
@@ -109,7 +131,7 @@ a {
 
 .phone-stage {
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: var(--stable-screen);
   display: grid;
   place-items: center;
   padding: 20px;
@@ -118,7 +140,7 @@ a {
 .phone-frame {
   position: relative;
   width: min(430px, 100%);
-  height: min(900px, calc(100dvh - 44px));
+  height: min(900px, calc(var(--stable-screen) - 44px));
   min-height: 720px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -1271,7 +1293,7 @@ a {
 
 /* HTML5 UP Dimension inspired client site */
 .client-stage {
-  min-height: 100dvh;
+  min-height: var(--stable-screen);
   display: grid;
   place-items: center;
   padding: 3rem 1.25rem;
@@ -1283,10 +1305,10 @@ a {
 .client-stage::before {
   content: '';
   position: fixed;
-  inset: -7dvh 0;
+  inset: -7svh 0;
   z-index: -2;
   pointer-events: none;
-  background: url('/images/black-forest-hair-front.png') center 43% / auto clamp(860px, 118dvh, 1220px) no-repeat;
+  background: url('/images/black-forest-hair-front.png') center 43% / auto clamp(860px, 118svh, 1220px) no-repeat;
   filter: brightness(0.68) contrast(1.08);
   opacity: 0.86;
 }
@@ -1326,7 +1348,7 @@ a {
 
 .client-stage .app-shell {
   height: auto;
-  min-height: calc(100dvh - 6rem);
+  min-height: calc(var(--stable-screen) - 6rem);
   display: grid;
   align-content: center;
   gap: 2rem;
@@ -1509,7 +1531,7 @@ a {
 .client-stage .confirmation-screen,
 .client-stage .launcher-screen {
   width: min(760px, 100%);
-  max-height: min(78dvh, 760px);
+  max-height: min(78svh, 760px);
   overflow: auto;
   scroll-margin-top: 5rem;
   padding: 2.25rem;
@@ -1689,13 +1711,13 @@ a {
 }
 
 .client-splash-stage {
-  min-height: 100dvh;
+  min-height: var(--stable-screen);
   padding: 2rem;
 }
 
 .client-splash-stage::before {
   background-position: center 39%;
-  background-size: auto clamp(900px, 122dvh, 1280px);
+  background-size: auto clamp(900px, 122svh, 1280px);
   filter: brightness(0.46) contrast(1.12);
   opacity: 0.76;
 }
@@ -1714,7 +1736,7 @@ a {
   position: relative;
   z-index: 1;
   width: min(430px, 100%);
-  min-height: calc(100dvh - 4rem);
+  min-height: calc(var(--stable-screen) - 4rem);
   display: grid;
   place-items: center;
   color: #fff;
@@ -1846,7 +1868,7 @@ a {
 
 /* TailAdmin inspired admin website */
 .tailadmin-app {
-  min-height: 100dvh;
+  min-height: var(--stable-screen);
   display: flex;
   background: #f7f7f7;
   color: #111;
@@ -1857,7 +1879,7 @@ a {
   position: sticky;
   top: 0;
   width: 290px;
-  height: 100dvh;
+  height: var(--stable-screen);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -2146,7 +2168,7 @@ a {
 }
 
 .tailadmin-login {
-  min-height: 100dvh;
+  min-height: var(--stable-screen);
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -2174,9 +2196,9 @@ a {
   }
 
   .client-stage::before {
-    inset: -4dvh 0;
+    inset: -4svh 0;
     background-position: center 39%;
-    background-size: auto 116dvh;
+    background-size: auto 116svh;
     opacity: 0.72;
   }
 
@@ -2196,7 +2218,7 @@ a {
 
   .client-splash-stage::before {
     background-position: center 39%;
-    background-size: auto 120dvh;
+    background-size: auto 120svh;
     opacity: 0.76;
   }
 
@@ -2211,7 +2233,7 @@ a {
   }
 
   .client-stage .app-shell {
-    min-height: calc(100dvh - 7.5rem);
+    min-height: calc(var(--stable-screen) - 7.5rem);
     align-content: start;
   }
 
@@ -2301,7 +2323,7 @@ a {
 
   .phone-stage {
     display: block;
-    min-height: 100dvh;
+    min-height: var(--stable-screen);
     padding: 0;
   }
 
@@ -2316,7 +2338,7 @@ a {
   }
 
   .client-splash {
-    min-height: calc(100dvh - 2.5rem);
+    min-height: calc(var(--stable-screen) - 2.5rem);
   }
 
   .splash-content {
@@ -2325,8 +2347,8 @@ a {
 
   .phone-frame {
     width: 100%;
-    height: 100dvh;
-    min-height: 100dvh;
+    height: var(--stable-screen);
+    min-height: var(--stable-screen);
     border: 0;
     border-radius: 0;
   }
