@@ -10,7 +10,7 @@ export function toDateKey(date) {
 
 export function displayDate(dateKey) {
   const date = new Date(`${dateKey}T12:00:00`);
-  return date.toLocaleDateString('ro-RO', {
+  return date.toLocaleDateString('en-GB', {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -19,7 +19,7 @@ export function displayDate(dateKey) {
 
 export function displayLongDate(dateKey) {
   const date = new Date(`${dateKey}T12:00:00`);
-  return date.toLocaleDateString('ro-RO', {
+  return date.toLocaleDateString('en-GB', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -162,12 +162,12 @@ export function buildCalendarUrl(booking) {
     `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(start)}`,
     `DTEND:${stamp(end)}`,
-    `SUMMARY:BlackSilva - ${service?.name || 'Programare'}`,
-    `DESCRIPTION:Cu ${stylist?.name || 'BlackSilva'}. Rezervare ${booking.id}.`,
+    `SUMMARY:BlackSilva - ${service?.name || 'Booking'}`,
+    `DESCRIPTION:With ${stylist?.name || 'BlackSilva'}. Booking ${booking.id}.`,
     'LOCATION:Badstuestraede 16, 1053 Kobenhavn',
     'BEGIN:VALARM',
     'ACTION:DISPLAY',
-    'DESCRIPTION:BlackSilva reminder - programarea incepe peste o ora',
+    'DESCRIPTION:BlackSilva reminder - your appointment starts in one hour',
     'TRIGGER:-PT1H',
     'END:VALARM',
     'END:VEVENT',

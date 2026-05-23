@@ -8,7 +8,7 @@ function isAdminAuthorized(req) {
 function sendError(res, error) {
   res.status(error.statusCode || 500).json({
     ok: false,
-    message: error.message || 'A aparut o eroare.',
+    message: error.message || 'Something went wrong.',
   });
 }
 
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         return;
       }
 
-      res.status(400).json({ ok: false, message: 'Actiune invalida.' });
+      res.status(400).json({ ok: false, message: 'Invalid action.' });
       return;
     }
 

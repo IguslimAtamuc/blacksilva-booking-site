@@ -36,8 +36,9 @@ import { products, salon, services, stylists } from './data.js';
 const emptyClient = { name: '', phone: '', email: '', notes: '' };
 
 const initialSelection = {
-  serviceId: services[0].id,
-  stylistId: services[0].staffIds[0],
+  hairLengthId: '',
+  serviceId: 'unisex-refresh',
+  stylistId: 'eduard',
   date: '',
   time: '',
   client: emptyClient,
@@ -47,10 +48,55 @@ const initialSelection = {
   source: 'client',
 };
 
+const hairLengthOptions = [
+  {
+    id: 'short-soft',
+    label: 'Very short',
+    detail: 'Closest to a pixie or short soft shape.',
+    image: '/images/hair-lengths/4.png',
+    serviceId: 'unisex-refresh',
+  },
+  {
+    id: 'bob',
+    label: 'Bob length',
+    detail: 'Closest to chin length or a compact bob.',
+    image: '/images/hair-lengths/5.png',
+    serviceId: 'unisex-refresh',
+  },
+  {
+    id: 'medium-classic',
+    label: 'Medium short',
+    detail: 'Closest to medium top length with clean sides.',
+    image: '/images/hair-lengths/2.png',
+    serviceId: 'unisex-refresh',
+  },
+  {
+    id: 'short-fade',
+    label: 'Short fade',
+    detail: 'Closest to a short crop, fade, or tight sides.',
+    image: '/images/hair-lengths/1.png',
+    serviceId: 'unisex-refresh',
+  },
+  {
+    id: 'long-layered',
+    label: 'Long layered',
+    detail: 'Closest to shoulder length or longer layers.',
+    image: '/images/hair-lengths/6.png',
+    serviceId: 'unisex-refresh',
+  },
+  {
+    id: 'long-flow',
+    label: 'Long flow',
+    detail: 'Closest to long hair past the neck or shoulders.',
+    image: '/images/hair-lengths/3.png',
+    serviceId: 'unisex-refresh',
+  },
+];
+
 const statuses = [
-  { id: 'confirmed', label: 'Confirmate' },
-  { id: 'completed', label: 'Finalizate' },
-  { id: 'cancelled', label: 'Anulate' },
+  { id: 'confirmed', label: 'Confirmed' },
+  { id: 'completed', label: 'Completed' },
+  { id: 'cancelled', label: 'Cancelled' },
   { id: 'no-show', label: 'No-show' },
 ];
 
@@ -72,13 +118,13 @@ function saveLocalJson(key, value) {
 }
 
 const paymentOptions = [
-  { id: 'salon', label: 'Plata in salon', detail: 'Rezervarea se confirma acum, plata se face la receptie.' },
-  { id: 'card-demo', label: 'Card demo', detail: 'Simuleaza o plata card pentru preview. Stripe poate fi conectat cu cheile reale.' },
-  { id: 'deposit', label: 'Deposit ready', detail: 'Flux pregatit pentru avans online cand se adauga Stripe.' },
+  { id: 'salon', label: 'Pay at the salon', detail: 'Your booking is confirmed now, and you pay at reception.' },
+  { id: 'card-demo', label: 'Card demo', detail: 'Preview a card payment flow. Stripe can be connected with live keys.' },
+  { id: 'deposit', label: 'Deposit ready', detail: 'Prepared for online deposits when Stripe is connected.' },
 ];
 
 function getPaymentLabel(method = 'salon') {
-  return paymentOptions.find((option) => option.id === method)?.label || 'Plata in salon';
+  return paymentOptions.find((option) => option.id === method)?.label || 'Pay at the salon';
 }
 
 function getBookingDateTime(booking) {
@@ -186,7 +232,7 @@ function Launcher() {
           <Scissors size={26} />
         </div>
         <h1>BlackSilva booking system</h1>
-        <p>Alege experienta pe care vrei sa o deschizi.</p>
+        <p>Choose the experience you want to open.</p>
         <div className="launcher-actions">
           <a href="/client">
             <UserRound size={20} />
@@ -204,7 +250,7 @@ function Launcher() {
 
 function Progress({ step }) {
   return (
-    <div className="mobile-progress" aria-label="Pasi rezervare">
+    <div className="mobile-progress" aria-label="Booking steps">
       {[0, 1, 2, 3, 4].map((item) => (
         <span key={item} className={item <= step ? 'active' : ''} />
       ))}
@@ -212,11 +258,54 @@ function Progress({ step }) {
   );
 }
 
-function BigButton({ selected, children, onClick, disabled }) {
+function BigButton({ selected, children, onClick, disabled, className }) {
   return (
-    <button type="button" className={cx('big-button', selected && 'selected')} onClick={onClick} disabled={disabled}>
+    <button
+      type="button"
+      className={cx('big-button', className, selected && 'selected')}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
+  );
+}
+
+function HairLengthScreen({ selection, setSelection, onSelect }) {
+  return (
+    <section className="step-screen hair-length-screen">
+      <span className="screen-kicker">Step 01</span>
+      <h1>Current hair length.</h1>
+      <p className="fine-copy">
+        Which image is closest to your current hair length? Not the haircut you want, just the length that matches you now.
+      </p>
+      <div className="hair-length-grid">
+        {hairLengthOptions.map((option) => (
+          <button
+            type="button"
+            key={option.id}
+            className={cx('hair-length-card', selection.hairLengthId === option.id && 'selected')}
+            onClick={() => {
+              setSelection((current) => ({
+                ...current,
+                hairLengthId: option.id,
+                serviceId: option.serviceId,
+                time: '',
+              }));
+              window.setTimeout(onSelect, 260);
+            }}
+          >
+            <span className="hair-image-wrap">
+              <img src={option.image} alt="" />
+            </span>
+            <span>
+              <strong>{option.label}</strong>
+              <small>{option.detail}</small>
+            </span>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -227,7 +316,7 @@ function ServiceScreen({ selection, setSelection }) {
   return (
     <section className="step-screen">
       <span className="screen-kicker">Step 01</span>
-      <h1>Alege serviciul.</h1>
+      <h1>Choose service.</h1>
       <div className="stack-list">
         {categories.map((category) => (
           <div key={category} className="list-group">
@@ -267,20 +356,24 @@ function ServiceScreen({ selection, setSelection }) {
   );
 }
 
-function StylistScreen({ selection, setSelection }) {
+function StylistScreen({ selection, setSelection, onSelect }) {
   const service = getService(selection.serviceId);
-  const available = stylists.filter((stylist) => service?.staffIds.includes(stylist.id));
+  const available = stylists.filter((stylist) => stylist.id !== 'chair' && (!service || service.staffIds.includes(stylist.id)));
 
   return (
     <section className="step-screen">
       <span className="screen-kicker">Step 02</span>
-      <h1>Alege specialistul.</h1>
+      <h1>Choose your specialist.</h1>
       <div className="stack-list">
         {available.map((stylist) => (
           <BigButton
             key={stylist.id}
+            className="stylist-button"
             selected={selection.stylistId === stylist.id}
-            onClick={() => setSelection((current) => ({ ...current, stylistId: stylist.id, time: '' }))}
+            onClick={() => {
+              setSelection((current) => ({ ...current, stylistId: stylist.id, time: '' }));
+              onSelect?.();
+            }}
           >
             <span className="avatar">{stylist.initial}</span>
             <span>
@@ -310,7 +403,7 @@ function TimeScreen({ selection, setSelection, bookings }) {
   return (
     <section className="step-screen">
       <span className="screen-kicker">Step 03</span>
-      <h1>Alege data si ora.</h1>
+      <h1>Choose date and time.</h1>
       <div className="day-rail">
         {days.map((day) => (
           <button
@@ -352,22 +445,22 @@ function ClientScreen({ selection, setSelection }) {
   return (
     <section className="step-screen">
       <span className="screen-kicker">Step 04</span>
-      <h1>Datele clientului.</h1>
+      <h1>Your details.</h1>
       <div className="form-stack">
         <label>
-          Nume complet
+          Full name
           <input value={selection.client.name} onChange={(event) => updateClient('name', event.target.value)} />
         </label>
         <label>
-          Telefon
+          Phone
           <input value={selection.client.phone} onChange={(event) => updateClient('phone', event.target.value)} />
         </label>
         <label>
-          Email confirmare
+          Confirmation email
           <input value={selection.client.email} onChange={(event) => updateClient('email', event.target.value)} />
         </label>
         <label>
-          Observatii
+          Notes
           <textarea value={selection.client.notes} onChange={(event) => updateClient('notes', event.target.value)} />
         </label>
       </div>
@@ -380,11 +473,11 @@ function ClientScreen({ selection, setSelection }) {
           <ShieldCheck size={20} />
           <span>
             <strong>Booking Protection</strong>
-            <small>+59 kr pentru reprogramare flexibila.</small>
+            <small>+59 kr for flexible rescheduling.</small>
           </span>
         </button>
         <label>
-          Produs
+          Product
           <select
             value={selection.productId}
             onChange={(event) => setSelection((current) => ({ ...current, productId: event.target.value }))}
@@ -401,15 +494,50 @@ function ClientScreen({ selection, setSelection }) {
   );
 }
 
+function BookingShopScreen({ selection, setSelection }) {
+  const shopProducts = getShopProducts();
+  const productChoices = [{ id: 'none', name: 'No product', price: 0, stock: 0, category: 'Optional' }, ...shopProducts];
+
+  return (
+    <section className="step-screen booking-shop-screen">
+      <span className="screen-kicker">Step 04</span>
+      <h1>Add products?</h1>
+      <p className="fine-copy">Choose a product if you want it prepared with your booking. You can also skip this step.</p>
+      <div className="shop-choice-grid">
+        {productChoices.map((product) => (
+          <button
+            type="button"
+            key={product.id}
+            className={cx('shop-choice-card', selection.productId === product.id && 'selected')}
+            onClick={() => setSelection((current) => ({ ...current, productId: product.id }))}
+          >
+            <span>
+              <small>{product.category}</small>
+              <strong>{product.name}</strong>
+              <em>{product.stock ? `${product.stock} in stock` : product.id === 'none' ? 'Skip shop' : 'Ask in salon'}</em>
+            </span>
+            <b>{product.price ? formatMoney(product.price) : '0 kr'}</b>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function SummaryRows({ booking }) {
   const service = getService(booking.serviceId);
   const stylist = getStylist(booking.stylistId);
   const product = getProduct(booking.productId);
+  const hairLength = hairLengthOptions.find((option) => option.id === booking.hairLengthId);
 
   return (
     <dl className="summary-rows">
       <div>
-        <dt>Serviciu</dt>
+        <dt>Current length</dt>
+        <dd>{hairLength?.label || '-'}</dd>
+      </div>
+      <div>
+        <dt>Service</dt>
         <dd>{service?.name || '-'}</dd>
       </div>
       <div>
@@ -417,22 +545,22 @@ function SummaryRows({ booking }) {
         <dd>{stylist?.name || '-'}</dd>
       </div>
       <div>
-        <dt>Data</dt>
+        <dt>Date</dt>
         <dd>{booking.date ? displayLongDate(booking.date) : '-'}</dd>
       </div>
       <div>
-        <dt>Ora</dt>
+        <dt>Time</dt>
         <dd>{booking.time || '-'}</dd>
       </div>
       <div>
         <dt>Extra</dt>
         <dd>
-          {booking.protection ? 'Protectie' : 'Fara protectie'}
+          {booking.protection ? 'Protection' : 'No protection'}
           {product?.price ? ` + ${product.name}` : ''}
         </dd>
       </div>
       <div>
-        <dt>Plata</dt>
+        <dt>Payment</dt>
         <dd>{getPaymentLabel(booking.payment?.method || booking.paymentMethod)}</dd>
       </div>
     </dl>
@@ -443,11 +571,11 @@ function ReviewScreen({ selection, setSelection }) {
   return (
     <section className="step-screen">
       <span className="screen-kicker">Step 05</span>
-      <h1>Confirma programarea.</h1>
+      <h1>Ready to book.</h1>
       <div className="review-card">
         <SummaryRows booking={selection} />
         <div className="total-row">
-          <span>Total estimat</span>
+          <span>Estimated total</span>
           <strong>{formatMoney(getBookingTotal(selection))}</strong>
         </div>
       </div>
@@ -467,7 +595,7 @@ function ReviewScreen({ selection, setSelection }) {
           </button>
         ))}
       </div>
-      <p className="fine-copy">Vei primi email de confirmare dupa ce rezervarea este salvata in sistem.</p>
+      <p className="fine-copy">You will receive a confirmation email after the booking is saved in the system.</p>
     </section>
   );
 }
@@ -478,20 +606,20 @@ function ConfirmationScreen({ booking, email, onReset }) {
       <span className="success-badge">
         <Check size={26} />
       </span>
-      <h1>Rezervare confirmata.</h1>
+      <h1>Booking confirmed.</h1>
       <p>
-        Codul tau este <strong>{booking.id}</strong>. Emailul de confirmare{' '}
-        {email?.sent ? 'a fost trimis.' : 'este pregatit, dar Resend nu este configurat inca.'}
+        Your code is <strong>{booking.id}</strong>. The confirmation email{' '}
+        {email?.sent ? 'has been sent.' : 'is prepared, but Resend is not configured yet.'}
       </p>
       <div className="review-card">
         <SummaryRows booking={booking} />
       </div>
       <div className="confirmation-actions">
         <a href={buildCalendarUrl(booking)} download={`${booking.id}.ics`}>
-          Calendar + alarma 1h
+          Calendar + 1h alert
         </a>
         <button type="button" onClick={onReset}>
-          Alta programare
+          New booking
         </button>
       </div>
     </main>
@@ -531,15 +659,15 @@ function ProfileScreen({ profile, setProfile, applyProfile }) {
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Client login</span>
-      <h1>Profilul tau.</h1>
-      <p className="fine-copy">Salvam local datele tale pentru booking rapid si pentru calendarul tau BlackSilva.</p>
+      <h1>Your profile.</h1>
+      <p className="fine-copy">We save your details locally for faster booking and your BlackSilva calendar.</p>
       <div className="form-stack">
         <label>
-          Nume complet
+          Full name
           <input value={profile.name} onChange={(event) => updateProfile('name', event.target.value)} />
         </label>
         <label>
-          Telefon
+          Phone
           <input value={profile.phone} onChange={(event) => updateProfile('phone', event.target.value)} />
         </label>
         <label>
@@ -549,9 +677,25 @@ function ProfileScreen({ profile, setProfile, applyProfile }) {
       </div>
       <button type="button" className="wide-action" onClick={applyProfile}>
         <UserRound size={18} />
-        Salveaza profil
+        Save profile
       </button>
     </section>
+  );
+}
+
+function ClientSplash({ opening, onContinue }) {
+  return (
+    <div className="phone-stage client-stage client-splash-stage">
+      <main className={cx('client-splash', opening && 'opening')} aria-label="BlackSilva entry">
+        <div className="splash-content">
+          <button type="button" className={cx('splash-button', opening && 'opening')} onClick={onContinue}>
+            <span>BS</span>
+          </button>
+          <strong>BLACK SILVA</strong>
+          <small>press to continue</small>
+        </div>
+      </main>
+    </div>
   );
 }
 
@@ -568,7 +712,7 @@ function ClientAuthGate({ mode, setMode, profile, setProfile, onSubmit }) {
         <div>
           <span className="screen-kicker">BlackSilva access</span>
           <h1>{isCreate ? 'Create account.' : 'Login.'}</h1>
-          <p>{isCreate ? 'Creeaza profilul si apoi poti face booking.' : 'Intra cu emailul tau ca sa vezi booking-ul.'}</p>
+          <p>{isCreate ? 'Create your profile, then start booking.' : 'Enter your email to access your booking.'}</p>
         </div>
         <span className="hero-icon hero-lettermark">BS</span>
       </section>
@@ -586,16 +730,16 @@ function ClientAuthGate({ mode, setMode, profile, setProfile, onSubmit }) {
 
       <section className="step-screen feature-screen auth-card">
         <span className="screen-kicker">{isCreate ? 'New client' : 'Client login'}</span>
-        <h1>{isCreate ? 'Profil nou.' : 'Bine ai revenit.'}</h1>
+        <h1>{isCreate ? 'New profile.' : 'Welcome back.'}</h1>
         <div className="form-stack">
           {isCreate && (
             <>
               <label>
-                Nume complet
+                Full name
                 <input value={profile.name} onChange={(event) => updateProfile('name', event.target.value)} />
               </label>
               <label>
-                Telefon
+                Phone
                 <input value={profile.phone} onChange={(event) => updateProfile('phone', event.target.value)} />
               </label>
             </>
@@ -620,32 +764,32 @@ function ClientCalendarScreen({ profile, bookings, loading, error, onLoad }) {
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Client calendar</span>
-      <h1>Programarile tale.</h1>
+      <h1>Your appointments.</h1>
       {!profile.email ? (
-        <div className="empty-state">Adauga emailul la Login ca sa vezi programarile tale salvate.</div>
+        <div className="empty-state">Add your email at login to see saved appointments.</div>
       ) : (
         <>
           <button type="button" className="wide-action" onClick={onLoad}>
             <RefreshCw size={18} />
-            Actualizeaza calendar
+            Refresh calendar
           </button>
           {error && <div className="error-box">{error}</div>}
-          {loading && <div className="empty-state">Se incarca...</div>}
-          {!loading && upcoming.length === 0 && <div className="empty-state">Nu ai programari active pe acest email.</div>}
+          {loading && <div className="empty-state">Loading...</div>}
+          {!loading && upcoming.length === 0 && <div className="empty-state">There are no active appointments for this email.</div>}
           <div className="compact-list">
             {upcoming.map((booking) => {
               const service = getService(booking.serviceId);
               return (
                 <article className="mini-card" key={booking.id}>
                   <div>
-                    <strong>{service?.name || 'Programare'}</strong>
+                    <strong>{service?.name || 'Booking'}</strong>
                     <span>
-                      {displayDate(booking.date)} la {booking.time}
+                      {displayDate(booking.date)} at {booking.time}
                     </span>
                   </div>
                   <a href={buildCalendarUrl(booking)} download={`${booking.id}.ics`}>
                     <Bell size={16} />
-                    Alarma
+                    Alert
                   </a>
                 </article>
               );
@@ -667,27 +811,27 @@ function ShopScreen({ selection, setSelection, goToBooking }) {
     const nextCart = [...cart, id];
     setCart(nextCart);
     saveLocalJson('bs-shop-cart', nextCart);
-    setMessage('Produs adaugat in cos.');
+    setMessage('Product added to cart.');
   };
 
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Online shop</span>
       <h1>Stock salon.</h1>
-      <p className="fine-copy">Alege produse pentru cos sau ataseaza un produs direct la urmatorul booking.</p>
+      <p className="fine-copy">Choose products for your cart or attach a product directly to your next booking.</p>
       <div className="shop-list">
         {shopProducts.map((product) => (
           <article className="product-card" key={product.id}>
             <div>
               <span>{product.category}</span>
               <strong>{product.name}</strong>
-              <small>{product.stock} buc in stock</small>
+              <small>{product.stock} in stock</small>
             </div>
             <b>{formatMoney(product.price)}</b>
             <div className="product-actions">
               <button type="button" onClick={() => addToCart(product.id)}>
                 <ShoppingBag size={15} />
-                Cos
+                Cart
               </button>
               <button
                 type="button"
@@ -698,19 +842,19 @@ function ShopScreen({ selection, setSelection, goToBooking }) {
                 }}
               >
                 <Check size={15} />
-                La booking
+                Add to booking
               </button>
             </div>
           </article>
         ))}
       </div>
       <div className="cart-summary">
-        <span>Cos online demo</span>
+        <span>Online cart demo</span>
         <strong>{formatMoney(cartTotal)}</strong>
         <button
           type="button"
           onClick={() => {
-            setMessage('Comanda demo este pregatita. Conectarea Stripe finalizeaza plata reala online.');
+            setMessage('The demo order is ready. Connecting Stripe completes real online payment.');
           }}
         >
           Checkout
@@ -738,6 +882,8 @@ function ClientApp() {
   const [confirmed, setConfirmed] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [introComplete, setIntroComplete] = useState(false);
+  const [introOpening, setIntroOpening] = useState(false);
 
   const loadClientBookings = async (email = profile.email) => {
     if (!email) return;
@@ -774,10 +920,10 @@ function ClientApp() {
   }, [step, view]);
 
   const canContinue = [
-    Boolean(selection.serviceId),
+    Boolean(selection.hairLengthId),
     Boolean(selection.stylistId),
     Boolean(selection.date && selection.time),
-    Boolean(selection.client.name && selection.client.phone && selection.client.email),
+    true,
     true,
   ];
 
@@ -801,12 +947,13 @@ function ClientApp() {
   const applyProfile = () => {
     saveLocalJson('bs-client-profile', profile);
     window.localStorage.setItem('bs-client-auth', '1');
+    const fallbackName = profile.name || profile.email?.split('@')[0] || 'Client';
     setSelection((current) => ({
       ...current,
       client: {
         ...current.client,
-        name: profile.name,
-        phone: profile.phone,
+        name: fallbackName,
+        phone: profile.phone || 'Not provided',
         email: profile.email,
       },
     }));
@@ -821,6 +968,19 @@ function ClientApp() {
     setStep(nextStep);
   };
 
+  const continueFromIntro = () => {
+    if (introOpening) return;
+    setIntroOpening(true);
+    window.setTimeout(() => {
+      setIntroComplete(true);
+      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }));
+    }, 680);
+  };
+
+  if (!introComplete) {
+    return <ClientSplash opening={introOpening} onContinue={continueFromIntro} />;
+  }
+
   if (confirmed?.booking) {
     return (
       <PhoneFrame app="client">
@@ -829,7 +989,7 @@ function ClientApp() {
           email={confirmed.email}
           onReset={() => {
             setConfirmed(null);
-            setSelection(initialSelection);
+            setSelection({ ...initialSelection, client: { ...emptyClient, ...profile } });
             setStep(0);
           }}
         />
@@ -857,22 +1017,24 @@ function ClientApp() {
         <section className="app-hero">
           <div>
             <span className="screen-kicker">Hair Salon</span>
-            <h1>Book your chair.</h1>
+            <h1>Book your haircut.</h1>
             <p>{salon.hours}</p>
           </div>
           <span className="hero-icon hero-lettermark">BS</span>
         </section>
 
-        <ClientQuickNav view={view} setView={setView} />
-
         {view === 'book' && (
           <>
             <Progress step={step} />
 
-            {step === 0 && <ServiceScreen selection={selection} setSelection={setSelection} />}
-            {step === 1 && <StylistScreen selection={selection} setSelection={setSelection} />}
+            {step === 0 && (
+              <HairLengthScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(1)} />
+            )}
+            {step === 1 && (
+              <StylistScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(2)} />
+            )}
             {step === 2 && <TimeScreen selection={selection} setSelection={setSelection} bookings={bookings} />}
-            {step === 3 && <ClientScreen selection={selection} setSelection={setSelection} />}
+            {step === 3 && <BookingShopScreen selection={selection} setSelection={setSelection} />}
             {step === 4 && <ReviewScreen selection={selection} setSelection={setSelection} />}
 
             {error && <div className="error-box">{error}</div>}
@@ -888,12 +1050,12 @@ function ClientApp() {
               </button>
               {step < 4 ? (
                 <button type="button" className="footer-primary" disabled={!canContinue[step]} onClick={() => setStep(step + 1)}>
-                  Continua
+                  Continue
                   <ArrowRight size={18} />
                 </button>
               ) : (
                 <button type="button" className="footer-primary" disabled={submitting} onClick={submit}>
-                  {submitting ? 'Se salveaza...' : 'Confirma'}
+                  {submitting ? 'Booking...' : 'Book Now'}
                   <Check size={18} />
                 </button>
               )}
@@ -941,15 +1103,15 @@ function AdminBookingCard({ booking, onStatus, onEmail, onReminder }) {
       </div>
       <strong>{booking.client?.name || 'Client'}</strong>
       <p>
-        {service?.name} cu {stylist?.name}
+        {service?.name} with {stylist?.name}
       </p>
       <div className={cx('email-pill', emailState)}>
         <Mail size={14} />
-        <span>{booking.emailStatus?.label || 'Email neverificat'}</span>
+        <span>{booking.emailStatus?.label || 'Email not verified'}</span>
       </div>
       <div className={cx('email-pill', reminderState)}>
         <Bell size={14} />
-        <span>{booking.reminderStatus?.label || 'Reminder neactivat'}</span>
+        <span>{booking.reminderStatus?.label || 'Reminder not active'}</span>
       </div>
       <div className="booking-meta">
         <span>
@@ -983,11 +1145,11 @@ function AdminBookingCard({ booking, onStatus, onEmail, onReminder }) {
       </div>
       <button type="button" className="email-action" onClick={() => onEmail(booking.id)}>
         <Mail size={15} />
-        Retrimite email
+        Resend email
       </button>
       <button type="button" className="email-action" onClick={() => onReminder(booking.id)}>
         <Bell size={15} />
-        Trimite reminder
+        Send reminder
       </button>
     </article>
   );
@@ -1032,17 +1194,17 @@ function AdminDashboard({ bookings }) {
   return (
     <section className="dashboard-grid">
       <StatCard label="Sales" value={formatMoney(revenue)} icon={<CreditCard size={18} />} />
-      <StatCard label="Finalizate" value={completed} icon={<Check size={18} />} />
-      <StatCard label="Anulate" value={cancelled} icon={<Clock size={18} />} />
+      <StatCard label="Completed" value={completed} icon={<Check size={18} />} />
+      <StatCard label="Cancelled" value={cancelled} icon={<Clock size={18} />} />
       <div className="insight-card">
         <span>Performance summary</span>
-        <strong>{bestServiceId ? getService(bestServiceId)?.name : 'In asteptare'}</strong>
-        <small>Cel mai cerut serviciu dupa numarul de programari.</small>
+        <strong>{bestServiceId ? getService(bestServiceId)?.name : 'Waiting for data'}</strong>
+        <small>The most requested service by booking count.</small>
       </div>
       <div className="insight-card">
         <span>Sales summary</span>
-        <strong>{productSales} produse + {chairRentals} chair rentals</strong>
-        <small>Urmareste add-on-urile, produsele si inchirierea scaunului din acelasi admin.</small>
+        <strong>{productSales} products + {chairRentals} chair rentals</strong>
+        <small>Track add-ons, products, and chair rental from the same admin.</small>
       </div>
     </section>
   );
@@ -1061,8 +1223,8 @@ function AdminCalendar({ bookings }) {
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Admin calendar</span>
-      <h1>Zi cu zi.</h1>
-      {Object.keys(grouped).length === 0 && <div className="empty-state">Nu sunt programari in calendar.</div>}
+      <h1>Day by day.</h1>
+      {Object.keys(grouped).length === 0 && <div className="empty-state">There are no bookings in the calendar.</div>}
       <div className="calendar-list">
         {Object.entries(grouped).map(([date, dayBookings]) => (
           <article className="day-card" key={date}>
@@ -1074,7 +1236,7 @@ function AdminCalendar({ bookings }) {
                   <time>{booking.time}</time>
                   <span>
                     <strong>{booking.client?.name || 'Client'}</strong>
-                    <small>{service?.name || 'Programare'} / {booking.client?.phone}</small>
+                    <small>{service?.name || 'Booking'} / {booking.client?.phone}</small>
                   </span>
                 </div>
               );
@@ -1120,7 +1282,7 @@ function StockScreen({ bookings }) {
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Stock & shop</span>
-      <h1>Produse.</h1>
+      <h1>Products.</h1>
       <div className="shop-list">
         {getShopProducts().map((product) => {
           const sold = soldProducts[product.id] || 0;
@@ -1129,7 +1291,7 @@ function StockScreen({ bookings }) {
               <div>
                 <span>{product.category}</span>
                 <strong>{product.name}</strong>
-                <small>{Math.max(product.stock - sold, 0)} buc disponibile / {sold} vandute</small>
+                <small>{Math.max(product.stock - sold, 0)} available / {sold} sold</small>
               </div>
               <b>{formatMoney(product.price)}</b>
             </article>
@@ -1149,8 +1311,8 @@ function ChairRentalsScreen({ bookings }) {
   return (
     <section className="step-screen feature-screen">
       <span className="screen-kicker">Rent chair</span>
-      <h1>Inchiriere scaun.</h1>
-      <p className="fine-copy">Oferta si cererile pentru barber/stylist independent stau doar in admin.</p>
+      <h1>Chair rental.</h1>
+      <p className="fine-copy">The offer and requests for independent barbers or stylists stay inside admin.</p>
       <div className="shop-list">
         {rentalServices.map((service) => (
           <article className="product-card" key={service.id}>
@@ -1164,7 +1326,7 @@ function ChairRentalsScreen({ bookings }) {
         ))}
       </div>
       <div className="compact-list">
-        {rentalBookings.length === 0 ? <div className="empty-state">Nu exista cereri de inchiriere inca.</div> : null}
+        {rentalBookings.length === 0 ? <div className="empty-state">There are no rental requests yet.</div> : null}
         {rentalBookings.map((booking) => {
           const service = getService(booking.serviceId);
           return (
@@ -1172,7 +1334,7 @@ function ChairRentalsScreen({ bookings }) {
               <div>
                 <strong>{booking.client?.name || 'Business client'}</strong>
                 <span>
-                  {service?.name || 'Chair rental'} / {displayDate(booking.date)} la {booking.time}
+                  {service?.name || 'Chair rental'} / {displayDate(booking.date)} at {booking.time}
                 </span>
                 <small>{booking.client?.email || booking.client?.phone || booking.id}</small>
               </div>
@@ -1244,7 +1406,7 @@ function AdminApp() {
               emailStatus: {
                 ...(booking.emailStatus || {}),
                 state: 'sending',
-                label: 'Se trimite...',
+                label: 'Sending...',
               },
             }
           : booking
@@ -1259,7 +1421,7 @@ function AdminApp() {
       });
       setBookings((current) => current.map((booking) => (booking.id === id ? payload.booking : booking)));
       if (!payload.email?.sent) {
-        setError(payload.email?.reason || 'Emailul nu a fost trimis. Verifica RESEND_API_KEY.');
+        setError(payload.email?.reason || 'The email was not sent. Check RESEND_API_KEY.');
       }
     } catch (emailError) {
       setError(emailError.message);
@@ -1277,7 +1439,7 @@ function AdminApp() {
               reminderStatus: {
                 ...(booking.reminderStatus || {}),
                 state: 'sending',
-                label: 'Se trimite...',
+                label: 'Sending...',
               },
             }
           : booking
@@ -1292,7 +1454,7 @@ function AdminApp() {
       });
       setBookings((current) => current.map((booking) => (booking.id === id ? payload.booking : booking)));
       if (!payload.reminder?.sent) {
-        setError(payload.reminder?.reason || 'Reminderul nu a fost trimis. Verifica RESEND_API_KEY.');
+        setError(payload.reminder?.reason || 'The reminder was not sent. Check RESEND_API_KEY.');
       }
     } catch (reminderError) {
       setError(reminderError.message);
@@ -1314,7 +1476,7 @@ function AdminApp() {
             <ShieldCheck size={26} />
           </div>
           <h1>Admin access.</h1>
-          <p>Introdu codul de administrare pentru BlackSilva booking app.</p>
+          <p>Enter the admin code for the BlackSilva booking app.</p>
           <div className="form-stack">
             <label>
               Admin code
@@ -1330,7 +1492,7 @@ function AdminApp() {
                 load(codeDraft);
               }}
             >
-              Deblocheaza admin
+              Unlock admin
             </button>
           </div>
         </main>
@@ -1345,7 +1507,7 @@ function AdminApp() {
           <div>
             <span className="screen-kicker">Salon dashboard</span>
             <h1>Booking app.</h1>
-            <p>{bookings.length} programari salvate</p>
+            <p>{bookings.length} saved bookings</p>
           </div>
           <button type="button" className="icon-button" onClick={load} aria-label="Refresh">
             <RefreshCw size={20} />
@@ -1353,15 +1515,15 @@ function AdminApp() {
         </section>
 
         <div className="admin-stats">
-          <StatCard label="Azi" value={todayCount} icon={<CalendarDays size={18} />} />
+          <StatCard label="Today" value={todayCount} icon={<CalendarDays size={18} />} />
           <StatCard label="Total" value={bookings.length} icon={<UserRound size={18} />} />
-          <StatCard label="Valoare" value={formatMoney(revenue)} icon={<Scissors size={18} />} />
+          <StatCard label="Value" value={formatMoney(revenue)} icon={<Scissors size={18} />} />
         </div>
 
         <AdminTabs active={activeTab} setActive={setActiveTab} />
 
         {error && <div className="error-box">{error}</div>}
-        {loading ? <div className="empty-state">Se incarca...</div> : null}
+        {loading ? <div className="empty-state">Loading...</div> : null}
 
         {!loading && activeTab === 'dashboard' && <AdminDashboard bookings={bookings} />}
         {!loading && activeTab === 'calendar' && <AdminCalendar bookings={bookings} />}
@@ -1373,12 +1535,12 @@ function AdminApp() {
           <>
             <label className="search-box">
               <Search size={17} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Cauta client" />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search client" />
             </label>
 
             <div className="filter-rail">
               <button type="button" className={filter === 'all' ? 'selected' : ''} onClick={() => setFilter('all')}>
-                Toate
+                All
               </button>
               {statuses.map((status) => (
                 <button
@@ -1392,7 +1554,7 @@ function AdminApp() {
               ))}
             </div>
 
-            {filtered.length === 0 ? <div className="empty-state">Nu sunt programari aici.</div> : null}
+            {filtered.length === 0 ? <div className="empty-state">There are no bookings here.</div> : null}
             <div className="admin-list">
               {filtered.map((booking) => (
                 <AdminBookingCard

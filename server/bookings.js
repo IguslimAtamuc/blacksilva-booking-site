@@ -6,7 +6,7 @@ function emailStatusFromResult(email) {
   if (email?.sent) {
     return {
       state: 'sent',
-      label: 'Email trimis',
+      label: 'Email sent',
       lastAttemptAt: new Date().toISOString(),
       details: email.results || [],
     };
@@ -15,7 +15,7 @@ function emailStatusFromResult(email) {
   if (email?.skipped) {
     return {
       state: 'not-configured',
-      label: 'Resend neconfigurat',
+      label: 'Resend not configured',
       lastAttemptAt: new Date().toISOString(),
       reason: email.reason,
     };
@@ -23,7 +23,7 @@ function emailStatusFromResult(email) {
 
   return {
     state: 'failed',
-    label: 'Email esuat',
+    label: 'Email failed',
     lastAttemptAt: new Date().toISOString(),
     details: email?.results || [],
   };
@@ -34,6 +34,7 @@ function normalizeBooking(input) {
   const normalizedPaymentMethod = ['salon', 'card-demo', 'deposit'].includes(paymentMethod) ? paymentMethod : 'salon';
 
   return {
+    hairLengthId: input.hairLengthId || '',
     serviceId: input.serviceId,
     stylistId: input.stylistId,
     date: input.date,
@@ -59,14 +60,15 @@ function validateBooking(booking) {
   const service = getService(booking.serviceId);
   const errors = [];
 
-  if (!service) errors.push('Serviciul nu exista.');
-  if (!booking.stylistId) errors.push('Alege un specialist.');
-  if (!booking.date) errors.push('Alege data.');
-  if (!booking.time) errors.push('Alege ora.');
-  if (!booking.client.name) errors.push('Numele este obligatoriu.');
-  if (!booking.client.phone) errors.push('Telefonul este obligatoriu.');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.client.email)) errors.push('Emailul nu este valid.');
-  if (service && !service.staffIds.includes(booking.stylistId)) errors.push('Specialistul nu poate face serviciul ales.');
+  if (!service) errors.push('The service does not exist.');
+  if (!booking.hairLengthId) errors.push('Choose your current hair length.');
+  if (!booking.stylistId) errors.push('Choose a specialist.');
+  if (!booking.date) errors.push('Choose a date.');
+  if (!booking.time) errors.push('Choose a time.');
+  if (!booking.client.name) errors.push('Name is required.');
+  if (!booking.client.phone) errors.push('Phone is required.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.client.email)) errors.push('The email is not valid.');
+  if (service && !service.staffIds.includes(booking.stylistId)) errors.push('The specialist cannot perform the selected service.');
 
   return errors;
 }
@@ -79,7 +81,7 @@ export async function listBookings() {
 export async function listClientBookings(email) {
   const cleanEmail = String(email || '').trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-    const error = new Error('Emailul nu este valid.');
+    const error = new Error('The email is not valid.');
     error.statusCode = 400;
     throw error;
   }
@@ -106,7 +108,7 @@ export async function reserveBooking(input) {
   );
 
   if (!availableSlot?.available) {
-    const error = new Error('Ora aleasa nu mai este disponibila.');
+    const error = new Error('The selected time is no longer available.');
     error.statusCode = 409;
     throw error;
   }
@@ -139,7 +141,7 @@ export async function reserveBooking(input) {
 export async function updateBookingStatus(id, status) {
   const allowed = new Set(['confirmed', 'completed', 'cancelled', 'no-show']);
   if (!allowed.has(status)) {
-    const error = new Error('Status invalid.');
+    const error = new Error('Invalid status.');
     error.statusCode = 400;
     throw error;
   }
@@ -147,7 +149,7 @@ export async function updateBookingStatus(id, status) {
   const bookings = await readBookings();
   const updated = bookings.map((booking) => (booking.id === id ? { ...booking, status } : booking));
   if (!updated.some((booking) => booking.id === id)) {
-    const error = new Error('Programarea nu exista.');
+    const error = new Error('The booking does not exist.');
     error.statusCode = 404;
     throw error;
   }
@@ -161,7 +163,7 @@ export async function resendBookingEmail(id) {
   const booking = bookings.find((item) => item.id === id);
 
   if (!booking) {
-    const error = new Error('Programarea nu exista.');
+    const error = new Error('The booking does not exist.');
     error.statusCode = 404;
     throw error;
   }
@@ -188,7 +190,7 @@ export async function sendBookingReminder(id) {
   const booking = bookings.find((item) => item.id === id);
 
   if (!booking) {
-    const error = new Error('Programarea nu exista.');
+    const error = new Error('The booking does not exist.');
     error.statusCode = 404;
     throw error;
   }
@@ -204,7 +206,7 @@ export async function sendBookingReminder(id) {
     ...booking,
     reminderStatus: {
       state: reminder?.sent ? 'sent' : reminder?.skipped ? 'not-configured' : 'failed',
-      label: reminder?.sent ? 'Reminder trimis' : reminder?.skipped ? 'Resend neconfigurat' : 'Reminder esuat',
+      label: reminder?.sent ? 'Reminder sent' : reminder?.skipped ? 'Resend not configured' : 'Reminder failed',
       lastAttemptAt: new Date().toISOString(),
       reason: reminder?.reason,
       details: reminder?.results || [],

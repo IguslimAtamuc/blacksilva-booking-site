@@ -15,6 +15,6 @@ export default async function handler(_req, res) {
       }));
     res.status(200).json({ ok: true, bookings: availability });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ ok: false, message: error.message || 'A aparut o eroare.' });
+    res.status(error.statusCode || 500).json({ ok: false, message: error.message || 'Something went wrong.' });
   }
 }

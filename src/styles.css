@@ -570,6 +570,116 @@ a {
   box-shadow: var(--shadow-pressed);
 }
 
+.stylist-button {
+  grid-template-columns: 64px minmax(0, 440px);
+  justify-content: center;
+  align-items: center;
+  column-gap: 28px;
+}
+
+.stylist-button > span:not(.avatar) {
+  min-width: 0;
+}
+
+.stylist-button .avatar {
+  color: #fff;
+}
+
+.hair-length-grid,
+.shop-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hair-length-card,
+.shop-choice-card {
+  position: relative;
+  min-width: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+}
+
+.hair-length-card {
+  display: grid;
+  gap: 12px;
+  padding: 10px;
+}
+
+.hair-length-card:active,
+.hair-length-card.selected,
+.shop-choice-card:active,
+.shop-choice-card.selected {
+  transform: translateY(3px) scale(0.985);
+  box-shadow: var(--shadow-pressed);
+}
+
+.hair-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 0.72;
+  overflow: hidden;
+  border-radius: calc(var(--radius-lg) - 8px);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.08), transparent 58%),
+    #050506;
+}
+
+.hair-image-wrap img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: grayscale(1) invert(1) contrast(1.32) brightness(1.08);
+  mix-blend-mode: screen;
+  opacity: 0.92;
+}
+
+.hair-length-card strong,
+.shop-choice-card strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 950;
+  line-height: 1.08;
+}
+
+.hair-length-card small,
+.shop-choice-card small,
+.shop-choice-card em {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.shop-choice-card {
+  min-height: 104px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.shop-choice-card b {
+  color: var(--accent-2);
+  font-size: 16px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.hair-length-card.selected,
+.shop-choice-card.selected {
+  background: var(--surface-2);
+}
+
 .day-rail,
 .filter-rail {
   display: grid;
@@ -1440,6 +1550,8 @@ a {
 }
 
 .client-stage .big-button,
+.client-stage .hair-length-card,
+.client-stage .shop-choice-card,
 .client-stage .review-card,
 .client-stage .product-card,
 .client-stage .mini-card,
@@ -1462,6 +1574,8 @@ a {
 }
 
 .client-stage .big-button.selected,
+.client-stage .hair-length-card.selected,
+.client-stage .shop-choice-card.selected,
 .client-stage .addons-panel button.selected,
 .client-stage .day-rail button.selected,
 .client-stage .slot-grid button.selected,
@@ -1472,11 +1586,85 @@ a {
 }
 
 .client-stage .big-button.selected *,
+.client-stage .hair-length-card.selected *,
+.client-stage .shop-choice-card.selected *,
 .client-stage .addons-panel button.selected *,
 .client-stage .day-rail button.selected *,
 .client-stage .slot-grid button.selected *,
 .client-stage .payment-options button.selected * {
   color: #000;
+}
+
+.client-stage .hair-length-grid {
+  width: 100%;
+}
+
+.client-stage .hair-length-card,
+.client-stage .shop-choice-card {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.42);
+  transform-style: preserve-3d;
+  box-shadow:
+    0 11px 0 rgba(255, 255, 255, 0.08),
+    0 1.2rem 2.8rem rgba(0, 0, 0, 0.44);
+}
+
+.client-stage .hair-length-card:hover,
+.client-stage .shop-choice-card:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.client-stage .hair-length-card:active,
+.client-stage .hair-length-card.selected,
+.client-stage .shop-choice-card:active,
+.client-stage .shop-choice-card.selected {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transform: translateY(7px) scale(0.985);
+  box-shadow:
+    inset 0 8px 22px rgba(0, 0, 0, 0.78),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.36);
+}
+
+.client-stage .hair-length-card.selected *,
+.client-stage .shop-choice-card.selected * {
+  color: #fff;
+}
+
+.client-stage .stylist-button {
+  grid-template-columns: 64px minmax(0, 430px);
+  justify-content: center;
+  column-gap: 2rem;
+}
+
+.client-stage .stylist-button .avatar,
+.client-stage .stylist-button.selected .avatar,
+.client-stage .stylist-button.selected .avatar * {
+  background: #050506;
+  color: #fff;
+}
+
+.client-stage .stylist-button.selected > span:not(.avatar) strong,
+.client-stage .stylist-button.selected > span:not(.avatar) small {
+  color: #000;
+}
+
+.client-stage .hair-image-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.08), transparent 56%),
+    #030303;
+}
+
+.client-stage .hair-image-wrap img {
+  filter: grayscale(1) invert(1) contrast(1.45) brightness(1.1);
+  opacity: 0.96;
+}
+
+.client-stage .shop-choice-card b {
+  color: #fff;
 }
 
 .client-stage .form-stack input,
@@ -1498,6 +1686,162 @@ a {
 .client-stage .footer-primary {
   background: #fff;
   color: #000;
+}
+
+.client-splash-stage {
+  min-height: 100dvh;
+  padding: 2rem;
+}
+
+.client-splash-stage::before {
+  background-position: center 39%;
+  background-size: auto clamp(900px, 122dvh, 1280px);
+  filter: brightness(0.46) contrast(1.12);
+  opacity: 0.76;
+}
+
+.client-splash-stage::after {
+  background:
+    radial-gradient(circle at 50% 43%, rgba(255, 255, 255, 0.06), transparent 17rem),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.38) 44%, rgba(0, 0, 0, 0.88)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.92), transparent 36%, transparent 64%, rgba(0, 0, 0, 0.92)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+  background-size: auto, auto, auto, 42px 42px, 42px 42px;
+}
+
+.client-splash {
+  position: relative;
+  z-index: 1;
+  width: min(430px, 100%);
+  min-height: calc(100dvh - 4rem);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.client-splash.opening {
+  animation: splashFade 680ms ease forwards;
+}
+
+.splash-content {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  transform: translateY(-1.5rem);
+}
+
+.splash-button {
+  position: relative;
+  isolation: isolate;
+  width: clamp(7.2rem, 28vw, 9rem);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.36);
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 0 rgba(255, 255, 255, 0.18),
+    0 1.25rem 3rem rgba(0, 0, 0, 0.38);
+}
+
+.splash-button::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: inherit;
+  animation: splashPulse 2.25s ease-in-out infinite;
+}
+
+.splash-button span {
+  font-size: clamp(1.45rem, 6vw, 2.05rem);
+  font-weight: 950;
+  letter-spacing: 0.06em;
+}
+
+.splash-button.opening {
+  pointer-events: none;
+  animation: splashOpen 680ms cubic-bezier(0.18, 0.82, 0.28, 1) forwards;
+}
+
+.splash-button.opening::before {
+  animation: none;
+}
+
+.splash-content strong {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 3.6vw, 1.18rem);
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  line-height: 1;
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.9);
+}
+
+.splash-content small {
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.client-splash.opening .splash-content strong,
+.client-splash.opening .splash-content small {
+  animation: splashTextOut 420ms ease forwards;
+}
+
+@keyframes splashPulse {
+  0%,
+  100% {
+    opacity: 0.78;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0;
+    transform: scale(1.34);
+  }
+}
+
+@keyframes splashOpen {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  42% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+@keyframes splashTextOut {
+  to {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+@keyframes splashFade {
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* TailAdmin inspired admin website */
@@ -1846,6 +2190,26 @@ a {
     background-size: auto, auto, auto, 42px 42px, 42px 42px;
   }
 
+  .client-splash-stage {
+    padding: 2rem;
+  }
+
+  .client-splash-stage::before {
+    background-position: center 39%;
+    background-size: auto 120dvh;
+    opacity: 0.76;
+  }
+
+  .client-splash-stage::after {
+    background:
+      radial-gradient(circle at 50% 43%, rgba(255, 255, 255, 0.06), transparent 17rem),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.38) 44%, rgba(0, 0, 0, 0.88)),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.92), transparent 36%, transparent 64%, rgba(0, 0, 0, 0.92)),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+    background-size: auto, auto, auto, 42px 42px, 42px 42px;
+  }
+
   .client-stage .app-shell {
     min-height: calc(100dvh - 7.5rem);
     align-content: start;
@@ -1943,6 +2307,20 @@ a {
 
   .client-stage {
     padding: 5.75rem 0.85rem 1.75rem;
+  }
+
+  .client-splash-stage {
+    display: grid;
+    place-items: center;
+    padding: 1.25rem;
+  }
+
+  .client-splash {
+    min-height: calc(100dvh - 2.5rem);
+  }
+
+  .splash-content {
+    transform: translateY(-0.75rem);
   }
 
   .phone-frame {

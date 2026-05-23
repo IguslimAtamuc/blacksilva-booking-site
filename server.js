@@ -99,7 +99,7 @@ app.post('/api/bookings/:id', async (req, res) => {
       res.json({ ok: true, ...result });
       return;
     }
-    res.status(400).json({ ok: false, message: 'Actiune invalida.' });
+    res.status(400).json({ ok: false, message: 'Invalid action.' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ ok: false, message: error.message });
   }

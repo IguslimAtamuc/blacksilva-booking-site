@@ -8,7 +8,7 @@ function isAdminAuthorized(req) {
 function sendError(res, error) {
   res.status(error.statusCode || 500).json({
     ok: false,
-    message: error.message || 'A aparut o eroare.',
+    message: error.message || 'Something went wrong.',
   });
 }
 
