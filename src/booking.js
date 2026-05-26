@@ -144,7 +144,8 @@ export function createBooking(selection) {
 export function getBookingTotal(selection) {
   const service = getService(selection.serviceId);
   const product = getProduct(selection.productId);
-  return (service?.price || 0) + (selection.protection ? 59 : 0) + (product?.price || 0);
+  const protectionPrice = selection.protection && selection.serviceId !== 'booking-protection' ? 59 : 0;
+  return (service?.price || 0) + protectionPrice + (product?.price || 0);
 }
 
 export function buildCalendarUrl(booking) {

@@ -26,10 +26,11 @@ function bookingEmailHtml(booking, variant = 'confirmation') {
   const product = getProduct(booking.productId);
   const total = getBookingTotal(booking);
   const isReminder = variant === 'reminder';
+  const includeProtection = booking.protection && booking.serviceId !== 'booking-protection';
   const invoiceDate = booking.createdAt ? new Date(booking.createdAt) : new Date();
   const invoiceRows = [
     service ? invoiceRow(service.name, service.price || 0) : '',
-    booking.protection ? invoiceRow('Booking Protection', 59) : '',
+    includeProtection ? invoiceRow('Booking Protection', 59) : '',
     product?.price ? invoiceRow(product.name, product.price) : '',
   ].join('');
   const title = isReminder ? 'Reminder: your appointment is coming soon.' : 'Your booking is confirmed.';
@@ -56,7 +57,7 @@ function bookingEmailHtml(booking, variant = 'confirmation') {
           <tr><td style="padding:10px 0;color:#9e9587">Date</td><td style="padding:10px 0;text-align:right">${escapeHtml(displayLongDate(booking.date))}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Time</td><td style="padding:10px 0;text-align:right">${escapeHtml(booking.time)}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Location</td><td style="padding:10px 0;text-align:right">${escapeHtml(salon.address)}</td></tr>
-          <tr><td style="padding:10px 0;color:#9e9587">Extra</td><td style="padding:10px 0;text-align:right">${booking.protection ? 'Booking Protection' : 'No protection'}${product?.price ? ` + ${escapeHtml(product.name)}` : ''}</td></tr>
+          <tr><td style="padding:10px 0;color:#9e9587">Extra</td><td style="padding:10px 0;text-align:right">${includeProtection ? 'Booking Protection' : 'No protection'}${product?.price ? ` + ${escapeHtml(product.name)}` : ''}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Payment</td><td style="padding:10px 0;text-align:right">${escapeHtml(paymentLabel)}</td></tr>
           <tr><td style="padding:14px 0;color:#d6b46e;border-top:1px solid rgba(214,180,110,.25)">Estimated total</td><td style="padding:14px 0;text-align:right;color:#f3db9b;border-top:1px solid rgba(214,180,110,.25)">${formatMoney(total)}</td></tr>
         </table>

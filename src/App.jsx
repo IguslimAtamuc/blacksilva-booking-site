@@ -37,7 +37,7 @@ const emptyClient = { name: '', phone: '', email: '', notes: '' };
 
 const initialSelection = {
   hairLengthId: '',
-  serviceId: 'unisex-refresh',
+  serviceId: 'classic-skin-fade-scissors-top',
   stylistId: 'eduard',
   date: '',
   time: '',
@@ -54,42 +54,42 @@ const hairLengthOptions = [
     label: 'Very short',
     detail: 'Closest to a pixie or short soft shape.',
     image: '/images/hair-lengths/4.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'classic-fade-no-skin-fade',
   },
   {
     id: 'bob',
     label: 'Bob length',
     detail: 'Closest to chin length or a compact bob.',
     image: '/images/hair-lengths/5.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'ladys-haircut-medium-short',
   },
   {
     id: 'medium-classic',
     label: 'Medium short',
     detail: 'Closest to medium top length with clean sides.',
     image: '/images/hair-lengths/2.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'elegant-scissors-haircut-only',
   },
   {
     id: 'short-fade',
     label: 'Short fade',
     detail: 'Closest to a short crop, fade, or tight sides.',
     image: '/images/hair-lengths/1.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'classic-skin-fade-scissors-top',
   },
   {
     id: 'long-layered',
     label: 'Long layered',
     detail: 'Closest to shoulder length or longer layers.',
     image: '/images/hair-lengths/6.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'ladys-haircut-long-hair',
   },
   {
     id: 'long-flow',
     label: 'Long flow',
     detail: 'Closest to long hair past the neck or shoulders.',
     image: '/images/hair-lengths/3.png',
-    serviceId: 'unisex-refresh',
+    serviceId: 'ladys-haircut-long-hair',
   },
 ];
 
@@ -251,7 +251,7 @@ function Launcher() {
 function Progress({ step }) {
   return (
     <div className="mobile-progress" aria-label="Booking steps">
-      {[0, 1, 2, 3, 4].map((item) => (
+      {[0, 1, 2, 3, 4, 5].map((item) => (
         <span key={item} className={item <= step ? 'active' : ''} />
       ))}
     </div>
@@ -286,10 +286,12 @@ function HairLengthScreen({ selection, setSelection, onSelect }) {
             key={option.id}
             className={cx('hair-length-card', selection.hairLengthId === option.id && 'selected')}
             onClick={() => {
+              const service = getService(option.serviceId);
               setSelection((current) => ({
                 ...current,
                 hairLengthId: option.id,
                 serviceId: option.serviceId,
+                stylistId: service?.staffIds.includes(current.stylistId) ? current.stylistId : service?.staffIds[0] || current.stylistId,
                 time: '',
               }));
               window.setTimeout(onSelect, 260);
@@ -317,7 +319,7 @@ function ServiceScreen({ selection, setSelection }) {
 
   return (
     <section className="step-screen">
-      <span className="screen-kicker">Step 01</span>
+      <span className="screen-kicker">Step 02</span>
       <h1>Choose service.</h1>
       <div className="stack-list">
         {categories.map((category) => (
@@ -347,7 +349,7 @@ function ServiceScreen({ selection, setSelection }) {
                       <em>{service.description}</em>
                     </small>
                   </span>
-                  <b>{formatMoney(service.price)}</b>
+                  <b>{service.priceLabel || formatMoney(service.price)}</b>
                 </BigButton>
               ))}
           </div>
@@ -363,7 +365,7 @@ function StylistScreen({ selection, setSelection, onSelect }) {
 
   return (
     <section className="step-screen">
-      <span className="screen-kicker">Step 02</span>
+      <span className="screen-kicker">Step 03</span>
       <h1>Choose your specialist.</h1>
       <div className="stack-list">
         {available.map((stylist) => (
@@ -403,7 +405,7 @@ function TimeScreen({ selection, setSelection, bookings }) {
 
   return (
     <section className="step-screen">
-      <span className="screen-kicker">Step 03</span>
+      <span className="screen-kicker">Step 04</span>
       <h1>Choose date and time.</h1>
       <div className="day-rail">
         {days.map((day) => (
@@ -501,7 +503,7 @@ function BookingShopScreen({ selection, setSelection }) {
 
   return (
     <section className="step-screen booking-shop-screen">
-      <span className="screen-kicker">Step 04</span>
+      <span className="screen-kicker">Step 05</span>
       <h1>Add products?</h1>
       <p className="fine-copy">Choose a product if you want it prepared with your booking. You can also skip this step.</p>
       <div className="shop-choice-grid">
@@ -556,7 +558,7 @@ function SummaryRows({ booking }) {
       <div>
         <dt>Extra</dt>
         <dd>
-          {booking.protection ? 'Protection' : 'No protection'}
+          {booking.protection && booking.serviceId !== 'booking-protection' ? 'Protection' : 'No protection'}
           {product?.price ? ` + ${product.name}` : ''}
         </dd>
       </div>
@@ -571,7 +573,7 @@ function SummaryRows({ booking }) {
 function ReviewScreen({ selection, setSelection }) {
   return (
     <section className="step-screen">
-      <span className="screen-kicker">Step 05</span>
+      <span className="screen-kicker">Step 06</span>
       <h1>Ready to book.</h1>
       <div className="review-card">
         <SummaryRows booking={selection} />
@@ -599,7 +601,7 @@ function ReviewScreen({ selection, setSelection }) {
       <p className="fine-copy">
         You will receive a confirmation email after the booking is saved in the system.
         <br />
-        <span>4.9 ★ · 120+ verified reviews</span>
+        <span>5.0 ★ · 847 verified reviews</span>
         <br />
         <span>23 bookings this week</span>
         <br />
@@ -939,9 +941,11 @@ function ClientApp() {
     return () => window.cancelAnimationFrame(frame);
   }, [step, view]);
 
+  const selectedService = getService(selection.serviceId);
   const canContinue = [
     Boolean(selection.hairLengthId),
-    Boolean(selection.stylistId),
+    Boolean(selection.serviceId),
+    Boolean(selection.stylistId && selectedService?.staffIds.includes(selection.stylistId)),
     Boolean(selection.date && selection.time),
     true,
     true,
@@ -1043,7 +1047,7 @@ function ClientApp() {
               <br />
               <span>{salon.hours}</span>
               <br />
-              <span>Most wanted: Full cut + beard combo · Precision haircut · Kids cut</span>
+              <span>Most wanted: Skin Fade / Elegant Scissors / Lady's Long Hair</span>
             </p>
           </div>
           <span className="hero-icon hero-lettermark">BS</span>
@@ -1056,12 +1060,13 @@ function ClientApp() {
             {step === 0 && (
               <HairLengthScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(1)} />
             )}
-            {step === 1 && (
-              <StylistScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(2)} />
+            {step === 1 && <ServiceScreen selection={selection} setSelection={setSelection} />}
+            {step === 2 && (
+              <StylistScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(3)} />
             )}
-            {step === 2 && <TimeScreen selection={selection} setSelection={setSelection} bookings={bookings} />}
-            {step === 3 && <BookingShopScreen selection={selection} setSelection={setSelection} />}
-            {step === 4 && <ReviewScreen selection={selection} setSelection={setSelection} />}
+            {step === 3 && <TimeScreen selection={selection} setSelection={setSelection} bookings={bookings} />}
+            {step === 4 && <BookingShopScreen selection={selection} setSelection={setSelection} />}
+            {step === 5 && <ReviewScreen selection={selection} setSelection={setSelection} />}
 
             {error && <div className="error-box">{error}</div>}
 
@@ -1074,7 +1079,7 @@ function ClientApp() {
               >
                 <ArrowLeft size={18} />
               </button>
-              {step < 4 ? (
+              {step < 5 ? (
                 <button type="button" className="footer-primary" disabled={!canContinue[step]} onClick={() => setStep(step + 1)}>
                   Continue
                   <ArrowRight size={18} />
