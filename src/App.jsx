@@ -310,7 +310,9 @@ function HairLengthScreen({ selection, setSelection, onSelect }) {
 }
 
 function ServiceScreen({ selection, setSelection }) {
-  const clientServices = services.filter((service) => service.category !== 'Business');
+  const clientServices = services
+    .filter((service) => service.category !== 'Business')
+    .sort((a, b) => b.price - a.price);
   const categories = [...new Set(clientServices.map((service) => service.category))];
 
   return (
@@ -341,12 +343,11 @@ function ServiceScreen({ selection, setSelection }) {
                 >
                   <span>
                     <strong>{service.name}</strong>
-                    <small>{service.description}</small>
+                    <small>
+                      <em>{service.description}</em>
+                    </small>
                   </span>
-                  <b>
-                    {formatMoney(service.price)}
-                    <small>{service.duration}m</small>
-                  </b>
+                  <b>{formatMoney(service.price)}</b>
                 </BigButton>
               ))}
           </div>
@@ -595,7 +596,26 @@ function ReviewScreen({ selection, setSelection }) {
           </button>
         ))}
       </div>
-      <p className="fine-copy">You will receive a confirmation email after the booking is saved in the system.</p>
+      <p className="fine-copy">
+        You will receive a confirmation email after the booking is saved in the system.
+        <br />
+        <span>4.9 ★ · 120+ verified reviews</span>
+        <br />
+        <span>23 bookings this week</span>
+        <br />
+        <span>⚑ Only 3 spots remaining this week</span>
+        <br />
+        <span>
+          <span aria-hidden="true" style={{ animation: 'splashPulse 1.6s ease-in-out infinite', color: 'var(--success)', display: 'inline-block' }}>
+            ●
+          </span>{' '}
+          Live — Weekend slots filling fast
+        </span>
+        <br />
+        <em>Imagine walking into your next meeting or date knowing you look exactly right.</em>
+        <br />
+        <span>Not satisfied? Come back within 7 days — free of charge.</span>
+      </p>
     </section>
   );
 }
@@ -1017,8 +1037,14 @@ function ClientApp() {
         <section className="app-hero">
           <div>
             <span className="screen-kicker">Hair Salon</span>
-            <h1>Book your haircut.</h1>
-            <p>{salon.hours}</p>
+            <h1>The First Impression Never Repeats.</h1>
+            <p>
+              Leave looking exactly how you want to be perceived.
+              <br />
+              <span>{salon.hours}</span>
+              <br />
+              <span>Most wanted: Full cut + beard combo · Precision haircut · Kids cut</span>
+            </p>
           </div>
           <span className="hero-icon hero-lettermark">BS</span>
         </section>

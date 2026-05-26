@@ -13,7 +13,7 @@ export const stylists = [
     name: 'Eduard',
     role: 'Men grooming specialist',
     initial: 'E',
-    focus: 'Modern men haircuts, beard work, precise details, and styling with personality.',
+    focus: "Since 2018, I've helped over 800 clients walk out looking exactly how they want to be seen.",
     specialties: ['Men haircuts', 'Beard', 'Grooming'],
   },
   {
@@ -21,7 +21,7 @@ export const stylists = [
     name: 'Elena',
     role: 'Women hair specialist',
     initial: 'E',
-    focus: 'Women haircuts, styling, blow dry, and versatile looks for events.',
+    focus: "Since 2018, I've helped over 800 clients walk out looking exactly how they want to be seen.",
     specialties: ['Women haircuts', 'Styling', 'Unisex'],
   },
   {
@@ -37,22 +37,33 @@ export const stylists = [
 export const services = [
   {
     id: 'men-haircut',
-    name: "Men's Haircut",
+    name: 'Precision haircut',
     category: 'Men',
     duration: 45,
     price: 180,
     staffIds: ['eduard', 'elena'],
-    description: 'Consultation, scissor or clipper cut, warm finish, and styling.',
+    description: 'Walk out sharper before you say a word.',
     popular: true,
   },
   {
     id: 'haircut-beard',
-    name: 'Haircut + Beard',
+    name: 'Full cut + beard combo',
     category: 'Men',
     duration: 60,
     price: 260,
     staffIds: ['eduard'],
-    description: 'Full haircut with beard shaping, outline work, and grooming.',
+    description: 'Leave with a face-framing look that feels intentional from every angle.',
+    popular: true,
+  },
+  {
+    id: 'kids-cut',
+    name: 'Kids cut',
+    category: 'Men',
+    duration: 30,
+    price: 150,
+    staffIds: ['eduard', 'elena'],
+    description: 'A calm, clean cut that makes them feel confident leaving the chair.',
+    popular: true,
   },
   {
     id: 'beard-trim',
@@ -61,7 +72,7 @@ export const services = [
     duration: 25,
     price: 140,
     staffIds: ['eduard'],
-    description: 'Shape, outline, hot towel finish, and beard oil.',
+    description: 'Look cleaner, more defined, and ready for close-up conversations.',
   },
   {
     id: 'women-haircut',
@@ -70,7 +81,7 @@ export const services = [
     duration: 60,
     price: 320,
     staffIds: ['elena'],
-    description: 'A haircut tailored to your face shape, hair texture, and style.',
+    description: 'Feel like your hair finally matches the version of you people notice first.',
     popular: true,
   },
   {
@@ -80,7 +91,7 @@ export const services = [
     duration: 75,
     price: 420,
     staffIds: ['elena'],
-    description: 'Wash, precise cut, and editorial finish with heat protection.',
+    description: 'Walk out with movement, polish, and a look that carries the room.',
   },
   {
     id: 'blow-dry',
@@ -89,7 +100,7 @@ export const services = [
     duration: 40,
     price: 240,
     staffIds: ['elena'],
-    description: 'Sleek, soft, or sculpted styling for events, photos, or a good day.',
+    description: 'Step into the day with hair that already feels camera-ready.',
   },
   {
     id: 'unisex-refresh',
@@ -98,7 +109,7 @@ export const services = [
     duration: 50,
     price: 280,
     staffIds: ['eduard', 'elena'],
-    description: 'A quick refresh built around your hair, not a label.',
+    description: 'Reset your look in one visit and feel put together again.',
   },
   {
     id: 'pack-five',
@@ -107,7 +118,7 @@ export const services = [
     duration: 45,
     price: 799,
     staffIds: ['eduard'],
-    description: 'Five prepaid haircuts, valid for 12 months, with savings compared to separate visits.',
+    description: 'Stay consistently sharp without thinking about your next appointment.',
   },
   {
     id: 'chair-rental-halfday',
