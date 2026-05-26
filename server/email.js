@@ -11,16 +11,31 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function invoiceRow(label, amount) {
+  return `
+    <tr>
+      <td style="padding:9px 0;color:#d8d0c3">${escapeHtml(label)}</td>
+      <td style="padding:9px 0;text-align:right;color:#f7efe2">${formatMoney(amount)}</td>
+    </tr>
+  `;
+}
+
 function bookingEmailHtml(booking, variant = 'confirmation') {
   const service = getService(booking.serviceId);
   const stylist = getStylist(booking.stylistId);
   const product = getProduct(booking.productId);
   const total = getBookingTotal(booking);
   const isReminder = variant === 'reminder';
+  const invoiceDate = booking.createdAt ? new Date(booking.createdAt) : new Date();
+  const invoiceRows = [
+    service ? invoiceRow(service.name, service.price || 0) : '',
+    booking.protection ? invoiceRow('Booking Protection', 59) : '',
+    product?.price ? invoiceRow(product.name, product.price) : '',
+  ].join('');
   const title = isReminder ? 'Reminder: your appointment is coming soon.' : 'Your booking is confirmed.';
   const intro = isReminder
     ? `Hi ${escapeHtml(booking.client.name)}, this is a reminder for your BlackSilva appointment.`
-    : `Hi ${escapeHtml(booking.client.name)}, your booking was registered successfully.`;
+    : `Hi ${escapeHtml(booking.client.name)}, your booking was registered successfully. Your confirmation and invoice summary are below.`;
   const paymentLabel =
     booking.payment?.method === 'card-demo'
       ? 'Card demo'
@@ -40,11 +55,24 @@ function bookingEmailHtml(booking, variant = 'confirmation') {
           <tr><td style="padding:10px 0;color:#9e9587">Specialist</td><td style="padding:10px 0;text-align:right">${escapeHtml(stylist?.name)}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Date</td><td style="padding:10px 0;text-align:right">${escapeHtml(displayLongDate(booking.date))}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Time</td><td style="padding:10px 0;text-align:right">${escapeHtml(booking.time)}</td></tr>
+          <tr><td style="padding:10px 0;color:#9e9587">Location</td><td style="padding:10px 0;text-align:right">${escapeHtml(salon.address)}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Extra</td><td style="padding:10px 0;text-align:right">${booking.protection ? 'Booking Protection' : 'No protection'}${product?.price ? ` + ${escapeHtml(product.name)}` : ''}</td></tr>
           <tr><td style="padding:10px 0;color:#9e9587">Payment</td><td style="padding:10px 0;text-align:right">${escapeHtml(paymentLabel)}</td></tr>
           <tr><td style="padding:14px 0;color:#d6b46e;border-top:1px solid rgba(214,180,110,.25)">Estimated total</td><td style="padding:14px 0;text-align:right;color:#f3db9b;border-top:1px solid rgba(214,180,110,.25)">${formatMoney(total)}</td></tr>
         </table>
+        <div style="margin-top:24px;border:1px solid rgba(214,180,110,.22);padding:18px;background:#080807">
+          <p style="color:#d6b46e;letter-spacing:.16em;text-transform:uppercase;font-size:10px;margin:0 0 12px">Invoice summary</p>
+          <table style="width:100%;border-collapse:collapse;color:#f7efe2">
+            <tr><td style="padding:8px 0;color:#9e9587">Invoice no.</td><td style="padding:8px 0;text-align:right">${escapeHtml(booking.id)}</td></tr>
+            <tr><td style="padding:8px 0;color:#9e9587">Invoice date</td><td style="padding:8px 0;text-align:right">${escapeHtml(invoiceDate.toLocaleDateString('en-GB'))}</td></tr>
+            ${invoiceRows}
+            <tr><td style="padding:12px 0 0;color:#d6b46e;border-top:1px solid rgba(214,180,110,.25)">Total</td><td style="padding:12px 0 0;text-align:right;color:#f3db9b;border-top:1px solid rgba(214,180,110,.25);font-size:20px">${formatMoney(total)}</td></tr>
+          </table>
+        </div>
         <p style="color:#d8d0c3;line-height:1.6;margin:22px 0 0">Address: ${escapeHtml(salon.address)}. Payment is made at the salon, and the final price may vary after consultation.</p>
+        <p style="margin:18px 0 0">
+          <a href="${escapeHtml(salon.mapsUrl)}" style="display:inline-block;color:#050505;background:#f3db9b;text-decoration:none;padding:12px 16px;border-radius:0;font-weight:700">Open location</a>
+        </p>
       </div>
     </div>
   `;
