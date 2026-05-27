@@ -51,51 +51,57 @@ const initialSelection = {
 const hairLengthOptions = [
   {
     id: 'short-soft',
-    label: 'Short hair / Men',
-    detail: 'Closest to very short hair or a masculine short shape.',
-    image: '/images/hair-lengths/4.png',
+    group: 'Men',
+    label: 'Men 1 / Short',
+    detail: 'About 2 cm from the scalp.',
+    image: '/images/hair-lengths/men-1-short.png',
     serviceId: 'classic-fade-no-skin-fade',
     stylistId: 'eduard',
   },
   {
-    id: 'bob',
-    label: 'Women bob',
-    detail: 'Closest to chin length or a compact feminine bob.',
-    image: '/images/hair-lengths/5.png',
-    serviceId: 'ladys-haircut-medium-short',
-    stylistId: 'elena',
+    id: 'medium-classic',
+    group: 'Men',
+    label: 'Men 2 / Medium',
+    detail: 'About 8-10 cm long.',
+    image: '/images/hair-lengths/men-2-medium.png',
+    serviceId: 'elegant-scissors-haircut-only',
+    stylistId: 'eduard',
   },
   {
-    id: 'medium-classic',
-    label: 'Men medium',
-    detail: "Closest to medium top length or a classic men's shape.",
-    image: '/images/hair-lengths/2.png',
+    id: 'long-flow',
+    group: 'Men',
+    label: 'Men 3 / Long',
+    detail: 'About 15 cm+ long.',
+    image: '/images/hair-lengths/men-3-long.png',
     serviceId: 'elegant-scissors-haircut-only',
     stylistId: 'eduard',
   },
   {
     id: 'short-fade',
-    label: 'Men fade',
-    detail: 'Closest to a short crop, fade, or tight sides.',
-    image: '/images/hair-lengths/1.png',
-    serviceId: 'classic-skin-fade-scissors-top',
+    group: 'Women',
+    label: 'Women 1 / Short',
+    detail: 'Above the jawline.',
+    image: '/images/hair-lengths/women-1-short.png',
+    serviceId: 'elegant-scissors-haircut-only',
     stylistId: 'eduard',
   },
   {
-    id: 'long-layered',
-    label: 'Women long',
-    detail: 'Closest to shoulder length or longer feminine layers.',
-    image: '/images/hair-lengths/6.png',
-    serviceId: 'ladys-haircut-long-hair',
+    id: 'bob',
+    group: 'Women',
+    label: 'Women 2 / Medium',
+    detail: 'Between chin and shoulders.',
+    image: '/images/hair-lengths/women-2-medium.png',
+    serviceId: 'ladys-haircut-medium-short',
     stylistId: 'elena',
   },
   {
-    id: 'long-flow',
-    label: 'Men long',
-    detail: "Closest to longer men's hair past the neck or shoulders.",
-    image: '/images/hair-lengths/3.png',
-    serviceId: 'elegant-scissors-haircut-only',
-    stylistId: 'eduard',
+    id: 'long-layered',
+    group: 'Women',
+    label: 'Women 3 / Long',
+    detail: 'Below the shoulders.',
+    image: '/images/hair-lengths/women-3-long.png',
+    serviceId: 'ladys-haircut-long-hair',
+    stylistId: 'elena',
   },
 ];
 
@@ -284,39 +290,60 @@ function getPreferredStylistId(service, currentStylistId, preferredStylistId) {
 }
 
 function HairLengthScreen({ selection, setSelection, onSelect }) {
+  const groups = ['Men', 'Women'];
+
   return (
     <section className="step-screen hair-length-screen">
       <span className="screen-kicker">Step 01</span>
-      <h1>Current hair length.</h1>
+      <h1>Choose your current hair length.</h1>
       <p className="fine-copy">
-        Which image is closest to your current hair length? Not the haircut you want, just the length that matches you now.
+        Select the option that best matches your hair length right now. Look at the length only, not the haircut style.
       </p>
-      <div className="hair-length-grid">
-        {hairLengthOptions.map((option) => (
-          <button
-            type="button"
-            key={option.id}
-            className={cx('hair-length-card', selection.hairLengthId === option.id && 'selected')}
-            onClick={() => {
-              const service = getService(option.serviceId);
-              setSelection((current) => ({
-                ...current,
-                hairLengthId: option.id,
-                serviceId: option.serviceId,
-                stylistId: getPreferredStylistId(service, current.stylistId, option.stylistId),
-                time: '',
-              }));
-              window.setTimeout(onSelect, 260);
-            }}
-          >
-            <span className="hair-image-wrap">
-              <img src={option.image} alt="" />
-            </span>
-            <span>
-              <strong>{option.label}</strong>
-              <small>{option.detail}</small>
-            </span>
-          </button>
+      <div className="hair-choice-guide">
+        <div>
+          <span className="guide-icon">OK</span>
+          <strong>You are choosing</strong>
+          <small>+ Your current hair length</small>
+        </div>
+        <div>
+          <span className="guide-icon danger">NO</span>
+          <strong>Do not choose based on</strong>
+          <small>- The haircut you want</small>
+          <small>- The haircut style in the image</small>
+        </div>
+      </div>
+      <div className="hair-length-groups">
+        {groups.map((group) => (
+          <div className="hair-length-group" key={group}>
+            <span className="screen-kicker">{group} 1-3</span>
+            <div className="hair-length-grid">
+              {hairLengthOptions
+                .filter((option) => option.group === group)
+                .map((option) => (
+                  <button
+                    type="button"
+                    key={option.id}
+                    aria-label={`${option.label}. ${option.detail}`}
+                    className={cx('hair-length-card', selection.hairLengthId === option.id && 'selected')}
+                    onClick={() => {
+                      const service = getService(option.serviceId);
+                      setSelection((current) => ({
+                        ...current,
+                        hairLengthId: option.id,
+                        serviceId: option.serviceId,
+                        stylistId: getPreferredStylistId(service, current.stylistId, option.stylistId),
+                        time: '',
+                      }));
+                      window.setTimeout(onSelect, 260);
+                    }}
+                  >
+                    <span className="hair-image-wrap">
+                      <img src={option.image} alt="" />
+                    </span>
+                  </button>
+                ))}
+            </div>
+          </div>
         ))}
       </div>
     </section>

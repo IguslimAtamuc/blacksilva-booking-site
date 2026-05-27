@@ -661,6 +661,81 @@ a {
   opacity: 0.92;
 }
 
+.hair-choice-guide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hair-choice-guide > div {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hair-choice-guide strong {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hair-choice-guide small {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.guide-icon {
+  grid-row: span 3;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.guide-icon.danger {
+  border-color: rgba(255, 86, 86, 0.62);
+}
+
+.hair-length-groups {
+  display: grid;
+  gap: 18px;
+}
+
+.hair-length-group > .screen-kicker {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.hair-length-screen .hair-length-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hair-length-screen .hair-length-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.hair-length-screen .hair-image-wrap {
+  aspect-ratio: 1 / 1;
+}
+
+.hair-length-screen .hair-image-wrap img {
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
 .hair-length-card strong,
 .shop-choice-card strong {
   display: block;
@@ -1681,8 +1756,9 @@ a {
 }
 
 .client-stage .hair-image-wrap img {
-  filter: grayscale(1) invert(1) contrast(1.45) brightness(1.1);
-  opacity: 0.96;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
 }
 
 .client-stage .shop-choice-card b {
@@ -2270,6 +2346,14 @@ a {
     padding: 1.5rem;
   }
 
+  .hair-choice-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .hair-length-screen .hair-length-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .tailadmin-app {
     display: block;
   }
@@ -2377,6 +2461,16 @@ a {
   .tailadmin-app .admin-stats,
   .tailadmin-app .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hair-choice-guide > div {
+    grid-template-columns: 34px 1fr;
+    padding: 12px;
+  }
+
+  .guide-icon {
+    width: 34px;
+    height: 34px;
   }
 
   .tailadmin-app .admin-screen > .admin-tabs button {
