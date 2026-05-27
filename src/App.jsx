@@ -51,45 +51,51 @@ const initialSelection = {
 const hairLengthOptions = [
   {
     id: 'short-soft',
-    label: 'Very short',
-    detail: 'Closest to a pixie or short soft shape.',
+    label: 'Short hair / Men',
+    detail: 'Closest to very short hair or a masculine short shape.',
     image: '/images/hair-lengths/4.png',
     serviceId: 'classic-fade-no-skin-fade',
+    stylistId: 'eduard',
   },
   {
     id: 'bob',
-    label: 'Bob length',
-    detail: 'Closest to chin length or a compact bob.',
+    label: 'Women bob',
+    detail: 'Closest to chin length or a compact feminine bob.',
     image: '/images/hair-lengths/5.png',
     serviceId: 'ladys-haircut-medium-short',
+    stylistId: 'elena',
   },
   {
     id: 'medium-classic',
-    label: 'Medium short',
-    detail: 'Closest to medium top length with clean sides.',
+    label: 'Men medium',
+    detail: "Closest to medium top length or a classic men's shape.",
     image: '/images/hair-lengths/2.png',
     serviceId: 'elegant-scissors-haircut-only',
+    stylistId: 'eduard',
   },
   {
     id: 'short-fade',
-    label: 'Short fade',
+    label: 'Men fade',
     detail: 'Closest to a short crop, fade, or tight sides.',
     image: '/images/hair-lengths/1.png',
     serviceId: 'classic-skin-fade-scissors-top',
+    stylistId: 'eduard',
   },
   {
     id: 'long-layered',
-    label: 'Long layered',
-    detail: 'Closest to shoulder length or longer layers.',
+    label: 'Women long',
+    detail: 'Closest to shoulder length or longer feminine layers.',
     image: '/images/hair-lengths/6.png',
     serviceId: 'ladys-haircut-long-hair',
+    stylistId: 'elena',
   },
   {
     id: 'long-flow',
-    label: 'Long flow',
-    detail: 'Closest to long hair past the neck or shoulders.',
+    label: 'Men long',
+    detail: "Closest to longer men's hair past the neck or shoulders.",
     image: '/images/hair-lengths/3.png',
-    serviceId: 'ladys-haircut-long-hair',
+    serviceId: 'elegant-scissors-haircut-only',
+    stylistId: 'eduard',
   },
 ];
 
@@ -271,6 +277,12 @@ function BigButton({ selected, children, onClick, disabled, className }) {
   );
 }
 
+function getPreferredStylistId(service, currentStylistId, preferredStylistId) {
+  if (preferredStylistId && service?.staffIds.includes(preferredStylistId)) return preferredStylistId;
+  if (service?.staffIds.includes(currentStylistId)) return currentStylistId;
+  return service?.staffIds[0] || currentStylistId;
+}
+
 function HairLengthScreen({ selection, setSelection, onSelect }) {
   return (
     <section className="step-screen hair-length-screen">
@@ -291,7 +303,7 @@ function HairLengthScreen({ selection, setSelection, onSelect }) {
                 ...current,
                 hairLengthId: option.id,
                 serviceId: option.serviceId,
-                stylistId: service?.staffIds.includes(current.stylistId) ? current.stylistId : service?.staffIds[0] || current.stylistId,
+                stylistId: getPreferredStylistId(service, current.stylistId, option.stylistId),
                 time: '',
               }));
               window.setTimeout(onSelect, 260);
@@ -332,9 +344,7 @@ function ServiceScreen({ selection, setSelection }) {
                   key={service.id}
                   selected={selection.serviceId === service.id}
                   onClick={() => {
-                    const stylistId = service.staffIds.includes(selection.stylistId)
-                      ? selection.stylistId
-                      : service.staffIds[0];
+                    const stylistId = getPreferredStylistId(service, selection.stylistId, service.preferredStylistId);
                     setSelection((current) => ({
                       ...current,
                       serviceId: service.id,
