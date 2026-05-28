@@ -289,7 +289,7 @@ function getPreferredStylistId(service, currentStylistId, preferredStylistId) {
   return service?.staffIds[0] || currentStylistId;
 }
 
-function HairLengthScreen({ selection, setSelection, onSelect }) {
+function HairLengthScreen({ selection, setSelection }) {
   const groups = ['Men', 'Women'];
 
   return (
@@ -334,7 +334,6 @@ function HairLengthScreen({ selection, setSelection, onSelect }) {
                         stylistId: getPreferredStylistId(service, current.stylistId, option.stylistId),
                         time: '',
                       }));
-                      window.setTimeout(onSelect, 260);
                     }}
                   >
                     <span className="hair-image-wrap">
@@ -1094,9 +1093,7 @@ function ClientApp() {
           <>
             <Progress step={step} />
 
-            {step === 0 && (
-              <HairLengthScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(1)} />
-            )}
+            {step === 0 && <HairLengthScreen selection={selection} setSelection={setSelection} />}
             {step === 1 && <ServiceScreen selection={selection} setSelection={setSelection} />}
             {step === 2 && (
               <StylistScreen selection={selection} setSelection={setSelection} onSelect={() => setStep(3)} />

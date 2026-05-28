@@ -1724,6 +1724,16 @@ a {
     inset 0 0 0 1px rgba(255, 255, 255, 0.36);
 }
 
+.client-stage .hair-length-card.selected {
+  border-color: var(--success);
+  background: rgba(71, 224, 111, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(71, 224, 111, 0.86),
+    0 0 24px rgba(71, 224, 111, 0.46),
+    0 0 60px rgba(71, 224, 111, 0.2),
+    inset 0 0 32px rgba(71, 224, 111, 0.08);
+}
+
 .client-stage .hair-length-card.selected *,
 .client-stage .shop-choice-card.selected * {
   color: #fff;
@@ -2466,6 +2476,15 @@ a {
   .hair-choice-guide > div {
     grid-template-columns: 34px 1fr;
     padding: 12px;
+  }
+
+  .hair-length-screen .hair-length-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .hair-length-screen .hair-length-groups {
+    gap: 24px;
   }
 
   .guide-icon {
